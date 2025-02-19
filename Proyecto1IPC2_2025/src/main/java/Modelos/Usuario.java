@@ -13,7 +13,7 @@ public class Usuario {
     private int idUsuario;
     private String nombreUsuario;
     private String contraseña;
-    private String rol;
+    private int idRol;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -27,8 +27,8 @@ public class Usuario {
         return contraseña;
     }
 
-    public String getRol() {
-        return rol;
+    public int getRol() {
+        return idRol;
     }
 
     public void setIdUsuario(int idUsuario) {
@@ -43,8 +43,8 @@ public class Usuario {
         this.contraseña = contraseña;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRol(int idRol) {
+        this.idRol = idRol;
     }
     
     
