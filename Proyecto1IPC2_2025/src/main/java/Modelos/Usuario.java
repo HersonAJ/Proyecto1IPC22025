@@ -14,6 +14,7 @@ public class Usuario {
     private String nombreUsuario;
     private String contraseña;
     private int idRol;
+    private String rolNombre;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -29,6 +30,10 @@ public class Usuario {
 
     public int getRol() {
         return idRol;
+    }
+    
+    public String getRolNombre(){
+        return rolNombre;
     }
 
     public void setIdUsuario(int idUsuario) {
@@ -47,6 +52,8 @@ public class Usuario {
         this.idRol = idRol;
     }
     
-    
+    public void setRolNombre(String rolNombre) {
+        this.rolNombre = rolNombre;
+    }
     
 }
