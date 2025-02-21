@@ -1,5 +1,6 @@
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
+<%@ include file="/resources/sidebar.jsp"  %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
