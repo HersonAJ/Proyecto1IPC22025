@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -53,6 +55,63 @@ public class UsuarioDB {
             e.printStackTrace();
         }
         return usuario;
+    }
+    
+    
+
+    // Método para obtener la lista de usuarios
+    public static List<Usuario> obtenerUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Obtener la conexión a la base de datos
+            connection = ConexionDB.getConnection();
+
+            // Consulta SQL para obtener todos los usuarios y sus roles
+            String query = "SELECT u.nombre_usuario, r.nombre_rol FROM Usuarios u JOIN Roles r ON u.id_rol = r.id_rol";
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+
+            // Procesar los resultados de la consulta
+            while (resultSet.next()) {
+                String nombreUsuario = resultSet.getString("nombre_usuario");
+                String nombreRol = resultSet.getString("nombre_rol");
+                Usuario usuario = new Usuario();
+                usuario.setNombreUsuario(nombreUsuario);
+                usuario.setRolNombre(nombreRol);
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar los recursos
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return usuarios;
     }
 }
 

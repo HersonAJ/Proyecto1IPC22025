@@ -10,9 +10,11 @@
     <div class="bg-primary text-white border-right" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
         <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">Panel de Control</div>
         <div class="list-group list-group-flush">
+            
+            
             <% if (rol.equals("Administrador")) { %>
-                <!-- Opciones para Administrador -->
-                <a href="crearUsuario.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+            <!-- Opciones para Administrador -->
+                <a href="registro.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-person-plus-fill me-2"></i>Crear Usuario
                 </a>
                 <a href="gestionarUsuarios.jsp" class="list-group-item list-group-item-action bg-primary text-white">
@@ -24,6 +26,9 @@
                 <a href="crearTipoComputadora.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-pc-display-horizontal me-2"></i>Crear Tipo de Computadora
                 </a>
+            
+            
+            
             <% } else if (rol.equals("Ensamblador")) { %>
                 <!-- Opciones para Encargado de Ensamblaje -->
                 <a href="gestionarComponentes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
@@ -41,7 +46,9 @@
                 <a href="consultarComputadoras.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-display me-2"></i>Consultar Computadoras Ensambladas
                 </a>
-            <% } else if (rol.equals("Vendedor")) { %>
+            
+                
+                <% } else if (rol.equals("Vendedor")) { %>
                 <!-- Opciones para Encargado de Ventas -->
                 <a href="registrarVenta.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cart-fill me-2"></i>Registrar Venta
