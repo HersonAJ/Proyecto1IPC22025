@@ -13,7 +13,7 @@ public class Componente {
     private int idComponente;
     private String nombre;
     private int idCategoria;
-    private double consto;
+    private double costo;
     private int cantidadDisponible;
 
     public int getIdComponente() {
@@ -28,8 +28,8 @@ public class Componente {
         return idCategoria;
     }
 
-    public double getConsto() {
-        return consto;
+    public double getCosto() {
+        return costo;
     }
 
     public int getCantidadDisponible() {
@@ -48,8 +48,8 @@ public class Componente {
         this.idCategoria = idCategoria;
     }
 
-    public void setConsto(double consto) {
-        this.consto = consto;
+    public void setCosto(double consto) {
+        this.costo = consto;
     }
 
     public void setCantidadDisponible(int cantidadDisponible) {
