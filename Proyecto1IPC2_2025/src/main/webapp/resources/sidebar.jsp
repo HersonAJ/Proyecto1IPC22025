@@ -26,6 +26,9 @@
                 <a href="crearTipoComputadora.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-pc-display-horizontal me-2"></i>Crear Tipo de Computadora
                 </a>
+                <a href="cargarArchivo.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                    <i class="bi bi-cloud-upload-fill me-2"></i>Cargar Archivo
+                </a>
             
             
             
