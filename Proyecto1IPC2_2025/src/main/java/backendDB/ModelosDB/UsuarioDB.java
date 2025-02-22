@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package backendDB.ModelosDB;
 
 import Modelos.Usuario;
@@ -15,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author herson
+ * @author
  */
 public class UsuarioDB {
 
@@ -56,55 +52,56 @@ public class UsuarioDB {
         }
         return usuario;
     }
-    
-    
 
     // Método para obtener la lista de usuarios
     public static List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
         try {
-            // Obtener la conexión a la base de datos
-            connection = ConexionDB.getConnection();
+            conn = ConexionDB.getConnection();
 
             // Consulta SQL para obtener todos los usuarios y sus roles
-            String query = "SELECT u.nombre_usuario, r.nombre_rol FROM Usuarios u JOIN Roles r ON u.id_rol = r.id_rol";
-            statement = connection.prepareStatement(query);
-            resultSet = statement.executeQuery();
+            String sql = "SELECT u.id_usuario, u.nombre_usuario, r.nombre_rol, u.estado FROM Usuarios u JOIN Roles r ON u.id_rol = r.id_rol";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
             // Procesar los resultados de la consulta
-            while (resultSet.next()) {
-                String nombreUsuario = resultSet.getString("nombre_usuario");
-                String nombreRol = resultSet.getString("nombre_rol");
+            while (rs.next()) {
+                int idUsuario = rs.getInt("id_usuario");
+                String nombreUsuario = rs.getString("nombre_usuario");
+                String nombreRol = rs.getString("nombre_rol");
+                String estado = rs.getString("estado");
                 Usuario usuario = new Usuario();
+                usuario.setIdUsuario(idUsuario);
                 usuario.setNombreUsuario(nombreUsuario);
                 usuario.setRolNombre(nombreRol);
+                usuario.setEstado(estado);  // Establecer el estado del usuario
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             // Cerrar los recursos
-            if (resultSet != null) {
+            if (rs != null) {
                 try {
-                    resultSet.close();
+                    rs.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (statement != null) {
+            if (stmt != null) {
                 try {
-                    statement.close();
+                    stmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection != null) {
+            if (conn != null) {
                 try {
-                    connection.close();
+                    conn.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -114,5 +111,3 @@ public class UsuarioDB {
         return usuarios;
     }
 }
-
-
