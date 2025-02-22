@@ -12,7 +12,6 @@ public class Componente {
     
     private int idComponente;
     private String nombre;
-    private int idCategoria;
     private double costo;
     private int cantidadDisponible;
 
@@ -22,10 +21,6 @@ public class Componente {
 
     public String getNombre() {
         return nombre;
-    }
-
-    public int getIdCategoria() {
-        return idCategoria;
     }
 
     public double getCosto() {
@@ -44,10 +39,6 @@ public class Componente {
         this.nombre = nombre;
     }
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
     public void setCosto(double consto) {
         this.costo = consto;
     }
@@ -55,7 +46,4 @@ public class Componente {
     public void setCantidadDisponible(int cantidadDisponible) {
         this.cantidadDisponible = cantidadDisponible;
     }
-    
-    
-    
 }

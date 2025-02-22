@@ -15,15 +15,14 @@ import java.sql.SQLException;
  * @author herson
  */
 public class ComponenteDB {
-    
+
     public static boolean registrarComponente(Componente componente) {
-        String sql = "INSERT INTO Componentes (nombre, id_categoria, costo, cantidad_disponible) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Componentes (nombre, costo, cantidad_disponible) VALUES (?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, componente.getNombre());
-            stmt.setInt(2, componente.getIdCategoria());
-            stmt.setDouble(3, componente.getCosto());
-            stmt.setInt(4, componente.getCantidadDisponible());
+            stmt.setDouble(2, componente.getCosto());
+            stmt.setInt(3, componente.getCantidadDisponible());
             int filasInsertadas = stmt.executeUpdate();
             return filasInsertadas > 0;
         } catch (SQLException e) {
@@ -31,5 +30,4 @@ public class ComponenteDB {
             return false;
         }
     }
-    
 }

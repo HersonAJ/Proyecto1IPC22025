@@ -45,9 +45,9 @@
                                     <form action="CambiarRolUsuarioServlet" method="post" style="display:inline;">
                                         <input type="hidden" name="idUsuario" value="<%= u.getIdUsuario() %>">
                                         <select name="nuevoRol" class="form-control mb-2">
-                                            <option value="1" <%= u.getRolNombre().equals("Ensamblador") ? "selected" : "" %>>Ensamblador</option>
-                                            <option value="2" <%= u.getRolNombre().equals("Vendedor") ? "selected" : "" %>>Vendedor</option>
-                                            <option value="3" <%= u.getRolNombre().equals("Administrador") ? "selected" : "" %>>Administrador</option>
+                                            <option value="2" <%= u.getRolNombre().equals("Ensamblador") ? "selected" : "" %>>Ensamblador</option>
+                                            <option value="3" <%= u.getRolNombre().equals("Vendedor") ? "selected" : "" %>>Vendedor</option>
+                                            <option value="1" <%= u.getRolNombre().equals("Administrador") ? "selected" : "" %>>Administrador</option>
                                         </select>
                                         <button type="submit" class="btn btn-warning btn-sm">Cambiar Rol</button>
                                     </form>
