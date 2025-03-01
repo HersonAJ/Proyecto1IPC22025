@@ -20,7 +20,7 @@
                 <a href="gestionarUsuarios.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-gear-fill me-2"></i>Gestionar Usuarios
                 </a>
-                <a href="reportes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="reportesAdmin.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Generar Reportes
                 </a>
                 <a href="crearTipoComputadora.jsp" class="list-group-item list-group-item-action bg-primary text-white">
