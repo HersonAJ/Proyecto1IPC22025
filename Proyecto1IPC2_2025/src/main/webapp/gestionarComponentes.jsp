@@ -16,8 +16,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Componentes</title>
     <script>
-        function toggleFormulario() {
+        function toggleFormularioAgregar() {
             var formulario = document.getElementById("formularioAgregar");
+            if (formulario.style.display === "none") {
+                formulario.style.display = "block";
+            } else {
+                formulario.style.display = "none";
+            }
+        }
+
+        function toggleFormularioEditar(id) {
+            var formulario = document.getElementById("formularioEditar_" + id);
             if (formulario.style.display === "none") {
                 formulario.style.display = "block";
             } else {
@@ -35,7 +44,7 @@
             <main class="col-md-9">
                 <div class="container">
                     <h2 class="mt-4">Gestionar Componentes</h2>
-                    <button class="btn btn-primary mb-3" onclick="toggleFormulario()">Agregar Componente</button>
+                    <button class="btn btn-primary mb-3" onclick="toggleFormularioAgregar()">Agregar Componente</button>
                     <div id="formularioAgregar" style="display:none;">
                         <form action="GestionComponentesServlet" method="post">
                             <div class="form-group">
@@ -74,8 +83,28 @@
                                 <td><%= componente.getCosto() %></td>
                                 <td><%= componente.getCantidadDisponible() %></td>
                                 <td>
-                                    <a href="editarComponente.jsp?id=<%= componente.getIdComponente() %>" class="btn btn-warning">Editar</a>
+                                    <button class="btn btn-warning" onclick="toggleFormularioEditar(<%= componente.getIdComponente() %>)">Editar</button>
                                     <a href="eliminarComponente?id=<%= componente.getIdComponente() %>" class="btn btn-danger">Eliminar</a>
+                                </td>
+                            </tr>
+                            <tr id="formularioEditar_<%= componente.getIdComponente() %>" style="display:none;">
+                                <td colspan="5">
+                                    <form action="GestionComponentesServlet" method="post">
+                                        <input type="hidden" id="idComponenteEditar" name="idComponente" value="<%= componente.getIdComponente() %>">
+                                        <div class="form-group">
+                                            <label for="nombreEditar">Nombre:</label>
+                                            <input type="text" class="form-control" id="nombreEditar" name="nombre" value="<%= componente.getNombre() %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="costoEditar">Costo:</label>
+                                            <input type="number" step="0.01" class="form-control" id="costoEditar" name="costo" value="<%= componente.getCosto() %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
+                                            <input type="number" class="form-control" id="cantidadDisponibleEditar" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </form>
                                 </td>
                             </tr>
                             <% } 

@@ -7,7 +7,6 @@ package Controllers;
 import Modelos.Componente;
 import backendDB.ModelosDB.ComponenteDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,9 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author herson
@@ -39,6 +35,7 @@ public class GestionComponentesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String idComponenteStr = request.getParameter("idComponente");
         String nombre = request.getParameter("nombre");
         double costo = Double.parseDouble(request.getParameter("costo"));
         int cantidadDisponible = Integer.parseInt(request.getParameter("cantidadDisponible"));
@@ -49,11 +46,25 @@ public class GestionComponentesServlet extends HttpServlet {
         componente.setCantidadDisponible(cantidadDisponible);
 
         try {
-            boolean resultado = ComponenteDB.registrarComponente(componente);
-            if (resultado) {
-                System.out.println("Componente agregado");
+            if (idComponenteStr == null || idComponenteStr.isEmpty()) {
+                // Agregar nuevo componente
+                boolean resultado = ComponenteDB.registrarComponente(componente);
+                if (resultado) {
+                    System.out.println("Component successfully added");
+                } else {
+                    System.out.println("Failed to add component");
+                }
             } else {
-                System.out.println("Fallo en agregar componente");
+                // Editar componente existente
+                int idComponente = Integer.parseInt(idComponenteStr);
+                componente.setIdComponente(idComponente);
+                System.out.println("Editando componente: " + idComponente);
+                boolean resultado = ComponenteDB.actualizarComponente(componente);
+                if (resultado) {
+                    System.out.println("actualizacion completada");
+                } else {
+                    System.out.println("actualizacion fallida");
+                }
             }
 
             listarComponentes(request, response);
@@ -69,4 +80,3 @@ public class GestionComponentesServlet extends HttpServlet {
         request.getRequestDispatcher("gestionarComponentes.jsp").forward(request, response);
     }
 }
-
