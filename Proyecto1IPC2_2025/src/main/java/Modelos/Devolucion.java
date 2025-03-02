@@ -9,60 +9,68 @@ package Modelos;
  * @author herson
  */
 public class Devolucion {
-    
+
     private int idDevolucion;
     private int idVenta;
     private int idCliente;
-    private int idUsuario;
+    private int idComputadora;
     private String fechaDevolucion;
-    private String motivoDevolucion;
+    private double montoPerdida;
+    private int idUsuario;
 
-    public int getIdDevolucion() {
-        return idDevolucion;
-    }
-
-    public int getIdVenta() {
-        return idVenta;
-    }
-
-    public int getIdCliente() {
-        return idCliente;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public int getIdUsuario() {
         return idUsuario;
     }
 
-    public String getFechaDevolucion() {
-        return fechaDevolucion;
-    }
-
-    public String getMotivoDevolucion() {
-        return motivoDevolucion;
+    public int getIdDevolucion() {
+        return idDevolucion;
     }
 
     public void setIdDevolucion(int idDevolucion) {
         this.idDevolucion = idDevolucion;
     }
 
+    public int getIdVenta() {
+        return idVenta;
+    }
+
     public void setIdVenta(int idVenta) {
         this.idVenta = idVenta;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
     }
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public int getIdComputadora() {
+        return idComputadora;
+    }
+
+    public void setIdComputadora(int idComputadora) {
+        this.idComputadora = idComputadora;
+    }
+
+    public String getFechaDevolucion() {
+        return fechaDevolucion;
     }
 
     public void setFechaDevolucion(String fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
     }
 
-    public void setMotivoDevolucion(String motivoDevolucion) {
-        this.motivoDevolucion = motivoDevolucion;
+    public double getMontoPerdida() {
+        return montoPerdida;
     }
-    
+
+    public void setMontoPerdida(double montoPerdida) {
+        this.montoPerdida = montoPerdida;
+    }
 }

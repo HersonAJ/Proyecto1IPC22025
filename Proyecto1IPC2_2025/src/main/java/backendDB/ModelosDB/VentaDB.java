@@ -48,6 +48,29 @@ public class VentaDB {
         return ventas;
     }
 
+    // Obtener una venta específica por su ID
+    public static Venta obtenerVenta(int idVenta) throws SQLException {
+        Venta venta = null;
+        String query = "SELECT * FROM Ventas WHERE id_venta = ?";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idVenta);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    venta = new Venta();
+                    venta.setIdVenta(rs.getInt("id_venta"));
+                    venta.setIdCliente(rs.getInt("id_cliente"));
+                    venta.setIdUsuario(rs.getInt("id_usuario"));
+                    venta.setFechaVenta(rs.getDate("fecha_venta"));
+                    venta.setTotalVenta(rs.getDouble("total_venta"));
+                }
+            }
+        }
+        return venta;
+    }
+
     // Obtener detalles de una venta específica
     public static List<DetalleVenta> obtenerDetallesVenta(int idVenta) throws SQLException {
         List<DetalleVenta> detalles = new ArrayList<>();
@@ -94,7 +117,6 @@ public class VentaDB {
         return cliente;
     }
 
-
     // Obtener información del usuario
     public static Usuario obtenerUsuario(int idUsuario) throws SQLException {
         Usuario usuario = null;
@@ -121,8 +143,6 @@ public class VentaDB {
         }
         return usuario;
     }
-
-
 
     // Obtener información de la computadora
     public static Computadora obtenerComputadora(int idComputadora) throws SQLException {
