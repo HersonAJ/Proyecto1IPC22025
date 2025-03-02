@@ -8,7 +8,10 @@ import Modelos.Componente;
 import backendDB.ConexionDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,6 +31,76 @@ public class ComponenteDB {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+
+    // Método para obtener todos los componentes
+    public static List<Componente> obtenerComponentes() throws SQLException {
+        List<Componente> componentes = new ArrayList<>();
+        String query = "SELECT * FROM Componentes";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query); 
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Componente componente = new Componente();
+                componente.setIdComponente(rs.getInt("id_componente"));
+                componente.setNombre(rs.getString("nombre"));
+                componente.setCosto(rs.getDouble("costo"));
+                componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+                componentes.add(componente);
+            }
+        }
+        return componentes;
+    }
+
+    // Método para obtener un componente por su ID
+    public static Componente obtenerComponentePorId(int idComponente) throws SQLException {
+        Componente componente = null;
+        String query = "SELECT * FROM Componentes WHERE id_componente = ?";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idComponente);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    componente = new Componente();
+                    componente.setIdComponente(rs.getInt("id_componente"));
+                    componente.setNombre(rs.getString("nombre"));
+                    componente.setCosto(rs.getDouble("costo"));
+                    componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+                }
+            }
+        }
+        return componente;
+    }
+
+    // Método para actualizar un componente
+    public static boolean actualizarComponente(Componente componente) throws SQLException {
+        String query = "UPDATE Componentes SET nombre = ?, costo = ?, cantidad_disponible = ? WHERE id_componente = ?";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, componente.getNombre());
+            ps.setDouble(2, componente.getCosto());
+            ps.setInt(3, componente.getCantidadDisponible());
+            ps.setInt(4, componente.getIdComponente());
+            int resultado = ps.executeUpdate();
+            return resultado > 0;
+        }
+    }
+
+    // Método para eliminar un componente
+    public static boolean eliminarComponente(int idComponente) throws SQLException {
+        String query = "DELETE FROM Componentes WHERE id_componente = ?";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idComponente);
+            int resultado = ps.executeUpdate();
+            return resultado > 0;
         }
     }
 }
