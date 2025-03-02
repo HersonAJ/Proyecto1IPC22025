@@ -24,11 +24,21 @@ public class GestionComponentesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        try {
-            listarComponentes(request, response);
-        } catch (SQLException ex) {
-            System.out.println("SQL Exception: " + ex.getMessage());
-            throw new ServletException(ex);
+        String action = request.getParameter("action");
+        if (action != null && action.equals("eliminar")) {
+            int idComponente = Integer.parseInt(request.getParameter("id"));
+            try {
+                eliminarComponente(request, response, idComponente);
+            } catch (SQLException ex) {
+                throw new ServletException(ex);
+            }
+        } else {
+            try {
+                listarComponentes(request, response);
+            } catch (SQLException ex) {
+                System.out.println("SQL Exception: " + ex.getMessage());
+                throw new ServletException(ex);
+            }
         }
     }
 
@@ -50,20 +60,19 @@ public class GestionComponentesServlet extends HttpServlet {
                 // Agregar nuevo componente
                 boolean resultado = ComponenteDB.registrarComponente(componente);
                 if (resultado) {
-                    System.out.println("Component successfully added");
+                    System.out.println("Componente agregado con exito");
                 } else {
-                    System.out.println("Failed to add component");
+                    System.out.println("Fallo agregar nuevo componente");
                 }
             } else {
                 // Editar componente existente
                 int idComponente = Integer.parseInt(idComponenteStr);
                 componente.setIdComponente(idComponente);
-                System.out.println("Editando componente: " + idComponente);
                 boolean resultado = ComponenteDB.actualizarComponente(componente);
                 if (resultado) {
-                    System.out.println("actualizacion completada");
+                    System.out.println("Componente actualizado");
                 } else {
-                    System.out.println("actualizacion fallida");
+                    System.out.println("Fallo la actualizacion del componente");
                 }
             }
 
@@ -78,5 +87,16 @@ public class GestionComponentesServlet extends HttpServlet {
         List<Componente> componentes = ComponenteDB.obtenerComponentes();
         request.setAttribute("componentes", componentes);
         request.getRequestDispatcher("gestionarComponentes.jsp").forward(request, response);
+    }
+
+    private void eliminarComponente(HttpServletRequest request, HttpServletResponse response, int idComponente) throws SQLException, ServletException, IOException {
+  
+        boolean resultado = ComponenteDB.eliminarComponente(idComponente);
+        if (resultado) {
+            System.out.println("Componente eliminado correctamente con soft delete");
+        } else {
+            System.out.println("Fallo la eliminacion ");
+        }
+        listarComponentes(request, response);
     }
 }

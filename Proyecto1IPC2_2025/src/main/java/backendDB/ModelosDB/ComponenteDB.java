@@ -35,11 +35,11 @@ public class ComponenteDB {
     }
 
 
-    // Método para obtener todos los componentes
+    // Método para obtener todos los componentes activos
     public static List<Componente> obtenerComponentes() throws SQLException {
         List<Componente> componentes = new ArrayList<>();
-        String query = "SELECT * FROM Componentes";
-        
+        String query = "SELECT * FROM Componentes WHERE estado = 'activo'";
+
         try (Connection con = ConexionDB.getConnection(); 
              PreparedStatement ps = con.prepareStatement(query); 
              ResultSet rs = ps.executeQuery()) {
@@ -49,21 +49,23 @@ public class ComponenteDB {
                 componente.setNombre(rs.getString("nombre"));
                 componente.setCosto(rs.getDouble("costo"));
                 componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+                componente.setEstado(rs.getString("estado"));
                 componentes.add(componente);
             }
         }
         return componentes;
     }
 
-    // Método para obtener un componente por su ID
+
+    // Método para obtener un componente activo por su ID
     public static Componente obtenerComponentePorId(int idComponente) throws SQLException {
         Componente componente = null;
-        String query = "SELECT * FROM Componentes WHERE id_componente = ?";
-        
+        String query = "SELECT * FROM Componentes WHERE id_componente = ? AND estado = 'activo'";
+
         try (Connection con = ConexionDB.getConnection(); 
              PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, idComponente);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     componente = new Componente();
@@ -71,11 +73,13 @@ public class ComponenteDB {
                     componente.setNombre(rs.getString("nombre"));
                     componente.setCosto(rs.getDouble("costo"));
                     componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+                    componente.setEstado(rs.getString("estado"));
                 }
             }
         }
         return componente;
     }
+
 
     // Método para actualizar un componente
     public static boolean actualizarComponente(Componente componente) throws SQLException {
@@ -92,10 +96,10 @@ public class ComponenteDB {
         }
     }
 
-    // Método para eliminar un componente
+    // Método para eliminar un componente con soft delete
     public static boolean eliminarComponente(int idComponente) throws SQLException {
-        String query = "DELETE FROM Componentes WHERE id_componente = ?";
-        
+        String query = "UPDATE Componentes SET estado = 'eliminado' WHERE id_componente = ?";
+
         try (Connection con = ConexionDB.getConnection(); 
              PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, idComponente);
@@ -103,4 +107,5 @@ public class ComponenteDB {
             return resultado > 0;
         }
     }
+
 }

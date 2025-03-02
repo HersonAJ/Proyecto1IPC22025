@@ -33,6 +33,13 @@
                 formulario.style.display = "none";
             }
         }
+
+        function confirmarEliminacion(id) {
+            var confirmar = confirm("¿Estás seguro de que quieres eliminar este componente?");
+            if (confirmar) {
+                window.location.href = "GestionComponentesServlet?action=eliminar&id=" + id;
+            }
+        }
     </script>
 </head>
 <body>
@@ -84,7 +91,7 @@
                                 <td><%= componente.getCantidadDisponible() %></td>
                                 <td>
                                     <button class="btn btn-warning" onclick="toggleFormularioEditar(<%= componente.getIdComponente() %>)">Editar</button>
-                                    <a href="eliminarComponente?id=<%= componente.getIdComponente() %>" class="btn btn-danger">Eliminar</a>
+                                    <button class="btn btn-danger" onclick="confirmarEliminacion(<%= componente.getIdComponente() %>)">Eliminar</button>
                                 </td>
                             </tr>
                             <tr id="formularioEditar_<%= componente.getIdComponente() %>" style="display:none;">

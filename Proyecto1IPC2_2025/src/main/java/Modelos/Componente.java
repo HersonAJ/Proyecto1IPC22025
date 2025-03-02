@@ -14,6 +14,15 @@ public class Componente {
     private String nombre;
     private double costo;
     private int cantidadDisponible;
+    private String estado;
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
 
     public int getIdComponente() {
         return idComponente;
