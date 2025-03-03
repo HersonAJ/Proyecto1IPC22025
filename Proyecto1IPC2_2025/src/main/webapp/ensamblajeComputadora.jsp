@@ -1,10 +1,9 @@
+<%@page import="backendDB.ModelosDB.ComponenteDB"%>
+<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
+<%@page import="Modelos.Computadora"%>
 <%@ page import="java.util.List" %>
-<%@ page import="Modelos.Computadora" %>
 <%@ page import="Modelos.Componente" %>
 <%@ page import="Modelos.EnsamblajePieza" %>
-<%@ page import="backendDB.ModelosDB.ComputadoraDB" %>
-<%@ page import="backendDB.ModelosDB.ComponenteDB" %>
-<%@ page import="backendDB.ModelosDB.EnsamblajePiezaDB" %>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
 
@@ -20,10 +19,6 @@
             if (tipoComputadora) {
                 document.getElementById("componentesForm").submit();
             }
-        }
-
-        function mostrarAlerta(mensaje) {
-            alert(mensaje);
         }
     </script>
 </head>
@@ -89,16 +84,5 @@
             </main>
         </div>
     </div>
-
-    <%
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null) {
-    %>
-    <script>
-        mostrarAlerta("<%= mensaje %>");
-    </script>
-    <% 
-        }
-    %>
 </body>
 </html>
