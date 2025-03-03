@@ -107,5 +107,34 @@ public class ComponenteDB {
             return resultado > 0;
         }
     }
+    
+    public static int obtenerCantidadDisponible(int idComponente) throws SQLException {
+        int cantidadDisponible = 0;
+        String query = "SELECT cantidad_disponible FROM Componentes WHERE id_componente = ?";
+
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idComponente);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cantidadDisponible = rs.getInt("cantidad_disponible");
+                }
+            }
+        }
+        return cantidadDisponible;
+    }
+
+    public static boolean actualizarCantidad(int idComponente, int cantidad) throws SQLException {
+        String query = "UPDATE Componentes SET cantidad_disponible = cantidad_disponible + ? WHERE id_componente = ?";
+
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, cantidad);
+            ps.setInt(2, idComponente);
+            int resultado = ps.executeUpdate();
+            return resultado > 0;
+        }
+    }
 
 }

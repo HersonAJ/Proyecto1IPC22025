@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -53,6 +55,26 @@ public class ComputadoraDB {
             }
         }
         return computadora;
+    }
+    
+        // Método para obtener todas las computadoras
+    public static List<Computadora> obtenerComputadoras() throws SQLException {
+        List<Computadora> computadoras = new ArrayList<>();
+        String query = "SELECT * FROM Computadoras";
+        
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query); 
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Computadora computadora = new Computadora();
+                computadora.setIdComputadora(rs.getInt("id_computadora"));
+                computadora.setNombre(rs.getString("nombre"));
+                computadora.setPrecioVenta(rs.getDouble("precio_venta"));
+                computadora.setCostoTotal(rs.getDouble("costo_total"));
+                computadoras.add(computadora);
+            }
+        }
+        return computadoras;
     }
 }
 
