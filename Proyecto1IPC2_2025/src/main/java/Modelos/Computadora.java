@@ -14,6 +14,15 @@ public class Computadora {
     private String nombre;
     private double precioVenta;
     private double costoTotal;
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public int getIdComputadora() {
         return idComputadora;
