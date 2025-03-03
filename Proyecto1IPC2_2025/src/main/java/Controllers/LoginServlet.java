@@ -29,6 +29,7 @@ public class LoginServlet extends HttpServlet {
         Usuario usuario = UsuarioDB.verificarCredenciales(nombreUsuario, contraseña);
         if(usuario != null) {
             HttpSession session = request.getSession();
+            session.setAttribute("idUsuario", usuario.getIdUsuario()); //setear el id en la sesion
             session.setAttribute("usuario", usuario);
             session.setAttribute("rolNombre", usuario.getRolNombre()); //setear el tipo de rol en la sesion 
             session.setAttribute("nombreUsuarioActivo" , usuario.getNombreUsuario());
