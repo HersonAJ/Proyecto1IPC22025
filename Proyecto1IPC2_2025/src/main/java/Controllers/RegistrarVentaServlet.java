@@ -32,6 +32,7 @@ public class RegistrarVentaServlet extends HttpServlet {
         String nombreCliente = request.getParameter("nombreCliente");
         String direccionCliente = request.getParameter("direccionCliente");
         String idComputadoraStr = request.getParameter("idComputadora");
+        String action = request.getParameter("action");
 
         if (idComputadoraStr == null || idComputadoraStr.isEmpty()) {
             response.sendRedirect("error.jsp");
@@ -69,8 +70,12 @@ public class RegistrarVentaServlet extends HttpServlet {
             
             session.setAttribute("cliente", cliente);
             session.setAttribute("detallesVenta", detallesVenta);
-            session.setAttribute("computadoraSeleccionada", computadora);
-            response.sendRedirect("resumenVenta.jsp");
+            
+            if ("add".equals(action)) {
+                response.sendRedirect("registrarVenta.jsp?clienteExiste=true");
+            } else if ("checkout".equals(action)) {
+                response.sendRedirect("resumenVenta.jsp");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
@@ -81,6 +86,3 @@ public class RegistrarVentaServlet extends HttpServlet {
         doPost(request, response);
     }
 }
-
-
-

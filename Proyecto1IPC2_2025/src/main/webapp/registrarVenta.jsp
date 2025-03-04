@@ -1,4 +1,6 @@
+<%@page import="Modelos.DetalleVenta"%>
 <%@page import="backendDB.ModelosDB.ComputadoraDB"%>
+<%@page import="Modelos.Computadora"%>
 <%@page import="java.util.List"%>
 <%@page import="Modelos.Cliente"%>
 <%@page import="Modelos.Computadora"%>
@@ -63,8 +65,40 @@
                                 %>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-3">Agregar a la Compra</button>
+                        <button type="submit" name="action" value="add" class="btn btn-primary mt-3">Agregar a la Compra</button>
+                        <button type="submit" name="action" value="checkout" class="btn btn-success mt-3">Proceder al Pago</button>
                     </form>
+
+                    <!-- Tabla de computadoras agregadas -->
+                    <div id="tablaComputadorasAgregadas">
+                        <h3>Computadoras Seleccionadas</h3>
+                        <table class="table table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de la Computadora</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    List<DetalleVenta> detallesVenta = (List<DetalleVenta>) session.getAttribute("detallesVenta");
+                                    if (detallesVenta != null) {
+                                        for (DetalleVenta detalle : detallesVenta) {
+                                            Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
+                                %>
+                                <tr>
+                                    <td><%= computadora.getNombre() %></td>
+                                    <td><%= detalle.getCantidad() %></td>
+                                    <td><%= detalle.getSubtotal() %></td>
+                                </tr>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </main>
         </div>
