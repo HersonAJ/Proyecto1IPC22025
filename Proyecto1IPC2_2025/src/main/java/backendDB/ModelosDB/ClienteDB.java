@@ -17,11 +17,11 @@ import java.sql.SQLException;
  */
 public class ClienteDB {
     
-    public static boolean registrarCliente (Cliente cliente) {
+    public static boolean registrarCliente(Cliente cliente) {
         String sql = "INSERT INTO Clientes (nit, nombre, direccion) VALUES (?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1,  cliente.getNit());
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cliente.getNit());
             stmt.setString(2, cliente.getNombre());
             stmt.setString(3, cliente.getDireccion());
             int filasInsertadas = stmt.executeUpdate();
@@ -31,27 +31,77 @@ public class ClienteDB {
             return false;
         }
     }
-    
+
     public static Cliente obtenerClientePorNit(String nit) {
-        String sql = "SELECT * FROM Cliente WHERE nit = ?";
+        String sql = "SELECT * FROM Clientes WHERE nit = ?";
         try (Connection conn = ConexionDB.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, nit);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Cliente cliente = new Cliente();
-                cliente.setIdCliente(rs.getInt("id_clente"));
+                cliente.setIdCliente(rs.getInt("id_cliente"));
                 cliente.setNit(rs.getString("nit"));
                 cliente.setNombre(rs.getString("nombre"));
                 cliente.setDireccion(rs.getString("direccion"));
                 return cliente;
             } else {
-                return null; //si el cliente no existe
+                return null; // Si el cliente no existe
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
-    
+
+    public static Cliente obtenerClientePorId(int idCliente) {
+        String sql = "SELECT * FROM Clientes WHERE id_cliente = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("id_cliente"));
+                cliente.setNit(rs.getString("nit"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setDireccion(rs.getString("direccion"));
+                return cliente;
+            } else {
+                return null; // Si el cliente no existe
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean actualizarCliente(Cliente cliente) {
+        String sql = "UPDATE Clientes SET nit = ?, nombre = ?, direccion = ? WHERE id_cliente = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cliente.getNit());
+            stmt.setString(2, cliente.getNombre());
+            stmt.setString(3, cliente.getDireccion());
+            stmt.setInt(4, cliente.getIdCliente());
+            int filasActualizadas = stmt.executeUpdate();
+            return filasActualizadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean eliminarCliente(int idCliente) {
+        String sql = "DELETE FROM Clientes WHERE id_cliente = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCliente);
+            int filasEliminadas = stmt.executeUpdate();
+            return filasEliminadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

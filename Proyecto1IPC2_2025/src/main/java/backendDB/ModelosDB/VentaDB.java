@@ -165,4 +165,92 @@ public class VentaDB {
         }
         return computadora;
     }
+    
+    //metodos para funciones del vendedor 
+
+    
+    // Método para registrar una venta
+    public static boolean registrarVenta(Venta venta) {
+        String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta) VALUES (?, ?, ?, ?)";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, venta.getIdCliente());
+            stmt.setInt(2, venta.getIdUsuario());
+            stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
+            stmt.setDouble(4, venta.getTotalVenta());
+            
+            int filasInsertadas = stmt.executeUpdate();
+            if (filasInsertadas > 0) {
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    venta.setIdVenta(generatedKeys.getInt(1));
+                }
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método existente para obtener una venta (ajustado)
+    public static Venta obtenerVentaPorID(int idVenta) {
+        String sql = "SELECT * FROM Ventas WHERE id_venta = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idVenta);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Venta venta = new Venta();
+                venta.setIdVenta(rs.getInt("id_venta"));
+                venta.setIdCliente(rs.getInt("id_cliente"));
+                venta.setIdUsuario(rs.getInt("id_usuario"));
+                venta.setFechaVenta(rs.getDate("fecha_venta"));
+                venta.setTotalVenta(rs.getDouble("total_venta"));
+                return venta;
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+        // Método para actualizar una venta
+    public static boolean actualizarVenta(Venta venta) {
+        String sql = "UPDATE Ventas SET id_cliente = ?, id_usuario = ?, fecha_venta = ?, total_venta = ? WHERE id_venta = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, venta.getIdCliente());
+            stmt.setInt(2, venta.getIdUsuario());
+            stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
+            stmt.setDouble(4, venta.getTotalVenta());
+            stmt.setInt(5, venta.getIdVenta());
+
+            int filasActualizadas = stmt.executeUpdate();
+            return filasActualizadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método para eliminar una venta
+    public static boolean eliminarVenta(int idVenta) {
+        String sql = "DELETE FROM Ventas WHERE id_venta = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idVenta);
+
+            int filasEliminadas = stmt.executeUpdate();
+            return filasEliminadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
