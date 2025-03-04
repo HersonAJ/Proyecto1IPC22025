@@ -17,6 +17,16 @@ public class Venta {
     private int idUsuario;
     private Date fechaVenta;
     private double totalVenta;
+    private String numeroFactura;
+
+    
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
+    }
 
     public int getIdVenta() {
         return idVenta;
