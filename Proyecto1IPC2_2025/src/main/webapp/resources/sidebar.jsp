@@ -53,7 +53,7 @@
                 
                 <% } else if (rol.equals("Vendedor")) { %>
                 <!-- Opciones para Encargado de Ventas -->
-                <a href="registrarVenta.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="buscarCliente.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cart-fill me-2"></i>Registrar Venta
                 </a>
                 <a href="registrarDevolucion.jsp" class="list-group-item list-group-item-action bg-primary text-white">
