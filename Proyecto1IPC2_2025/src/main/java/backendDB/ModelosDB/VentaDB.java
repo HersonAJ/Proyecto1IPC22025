@@ -170,29 +170,32 @@ public class VentaDB {
 
     
     // Método para registrar una venta
-    public static boolean registrarVenta(Venta venta) {
-        String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, venta.getIdCliente());
-            stmt.setInt(2, venta.getIdUsuario());
-            stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
-            stmt.setDouble(4, venta.getTotalVenta());
-            
-            int filasInsertadas = stmt.executeUpdate();
-            if (filasInsertadas > 0) {
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    venta.setIdVenta(generatedKeys.getInt(1));
-                }
-                return true;
+public static boolean registrarVenta(Venta venta) {
+    String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta, numero_factura) VALUES (?, ?, ?, ?, ?)";
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        stmt.setInt(1, venta.getIdCliente());
+        stmt.setInt(2, venta.getIdUsuario());
+        stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
+        stmt.setDouble(4, venta.getTotalVenta());
+        stmt.setInt(5, venta.getNumeroFactura()); // Asegúrate de establecer el numero_factura aquí
+
+        int filasInsertadas = stmt.executeUpdate();
+        if (filasInsertadas > 0) {
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                venta.setIdVenta(generatedKeys.getInt(1));
+                venta.setNumeroFactura(venta.getIdVenta()); // Usar idVenta como numero_factura
             }
-            return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            return true;
         }
+        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
 
     // Método existente para obtener una venta (ajustado)
     public static Venta obtenerVentaPorID(int idVenta) {
@@ -251,6 +254,24 @@ public class VentaDB {
             return false;
         }
     }
+    
+    public static boolean registrarDetalleVenta(DetalleVenta detalle) {
+    String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, detalle.getIdVenta());
+        stmt.setInt(2, detalle.getIdComputadora());
+        stmt.setInt(3, detalle.getCantidad());
+        stmt.setDouble(4, detalle.getSubtotal());
+
+        int filasInsertadas = stmt.executeUpdate();
+        return filasInsertadas > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
 
 }

@@ -106,10 +106,19 @@
 
                     <!-- Botón para continuar si hay artículos en la venta -->
                     <% if (detalleVenta != null && !detalleVenta.isEmpty()) { %>
-                        <form action="VentaServlet" method="post" class="mt-4">
-                            <input type="hidden" name="action" value="continuar">
-                            <button type="submit" class="btn btn-success">Continuar</button>
-                        </form>
+<form action="VentaServlet" method="post" class="mt-4">
+    <input type="hidden" name="action" value="confirmarVenta">
+    
+    <!-- Campo para ingresar la fecha de la venta -->
+    <div class="form-group">
+        <label for="fechaVenta">Fecha de la venta:</label>
+        <input type="date" id="fechaVenta" name="fechaVenta" class="form-control" required>
+    </div>
+
+    <!-- Botón para confirmar la venta -->
+    <button type="submit" class="btn btn-success mt-4">Confirmar Venta</button>
+</form>
+
                     <% } %>
                 </div>
             </main>

@@ -104,6 +104,11 @@ public class VentaServlet extends HttpServlet {
             request.setAttribute("detalleVenta", detalleVenta); // Lista de detalles actualizada
             request.getSession().setAttribute("detalleVenta", detalleVenta); // Actualizar en sesión
             request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+        } else if ("confirmarVenta".equals(action)) {
+            System.out.println("Se está ejecutando la acción de confirmarVenta");
+
+            // Redirigir al RegistrarVentaServlet
+            request.getRequestDispatcher("RegistrarVentaServlet").forward(request, response);
         }
 
     }

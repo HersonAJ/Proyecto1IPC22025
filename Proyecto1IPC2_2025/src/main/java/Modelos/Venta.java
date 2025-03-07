@@ -17,14 +17,14 @@ public class Venta {
     private int idUsuario;
     private Date fechaVenta;
     private double totalVenta;
-    private String numeroFactura;
+    private int numeroFactura;
 
     
-    public String getNumeroFactura() {
+    public int getNumeroFactura() {
         return numeroFactura;
     }
 
-    public void setNumeroFactura(String numeroFactura) {
+    public void setNumeroFactura(int numeroFactura) {
         this.numeroFactura = numeroFactura;
     }
 
