@@ -80,8 +80,6 @@ public class RegistrarVentaServlet extends HttpServlet {
         // Registrar la venta en la base de datos
         boolean ventaRegistrada = VentaDB.registrarVenta(venta);
         if (ventaRegistrada) {
-            // Asignar el número de factura como el ID de la venta
-            venta.setNumeroFactura(venta.getIdVenta());
             System.out.println("Venta registrada con ID: " + venta.getIdVenta() + " y número de factura: " + venta.getNumeroFactura());
 
             // Registrar los detalles de la venta
@@ -95,11 +93,9 @@ public class RegistrarVentaServlet extends HttpServlet {
             request.setAttribute("cliente", cliente);
             request.setAttribute("detalleVenta", detalleVenta);
             request.getRequestDispatcher("mostrarFactura.jsp").forward(request, response);
-
         } else {
             request.setAttribute("error", "No se pudo registrar la venta.");
             request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
         }
     }
 }
-

@@ -174,18 +174,31 @@ public static boolean registrarVenta(Venta venta) {
     String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta, numero_factura) VALUES (?, ?, ?, ?, ?)";
     try (Connection conn = ConexionDB.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        
+        // Configurar los valores para la consulta de inserción
         stmt.setInt(1, venta.getIdCliente());
         stmt.setInt(2, venta.getIdUsuario());
         stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
         stmt.setDouble(4, venta.getTotalVenta());
-        stmt.setInt(5, venta.getNumeroFactura()); // Asegúrate de establecer el numero_factura aquí
+        stmt.setInt(5, venta.getNumeroFactura()); // Inicialmente será 0
 
+        // Ejecutar la inserción
         int filasInsertadas = stmt.executeUpdate();
         if (filasInsertadas > 0) {
+            // Obtener el ID generado automáticamente
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next()) {
-                venta.setIdVenta(generatedKeys.getInt(1));
-                venta.setNumeroFactura(venta.getIdVenta()); // Usar idVenta como numero_factura
+                int idVentaGenerado = generatedKeys.getInt(1);
+                venta.setIdVenta(idVentaGenerado);
+                venta.setNumeroFactura(idVentaGenerado);
+            }
+
+            // Actualizar el campo numero_factura en la base de datos
+            String updateQuery = "UPDATE Ventas SET numero_factura = ? WHERE id_venta = ?";
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                updateStmt.setInt(1, venta.getNumeroFactura());
+                updateStmt.setInt(2, venta.getIdVenta());
+                updateStmt.executeUpdate();
             }
             return true;
         }

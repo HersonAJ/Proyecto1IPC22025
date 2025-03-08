@@ -11,6 +11,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venta - Selección de Computadoras</title>
     <jsp:include page="/resources/resources.jsp" />
+    <script>
+        // Función para confirmar la venta antes de proceder
+        function confirmarVenta(event) {
+            const confirmar = confirm("¿Estás seguro de que deseas proceder con la venta?");
+            if (!confirmar) {
+                event.preventDefault(); // Evitar el envío del formulario si no se confirma
+            }
+        }
+    </script>
 </head>
 <body>
     <jsp:include page="/resources/header.jsp" />
@@ -106,19 +115,18 @@
 
                     <!-- Botón para continuar si hay artículos en la venta -->
                     <% if (detalleVenta != null && !detalleVenta.isEmpty()) { %>
-<form action="VentaServlet" method="post" class="mt-4">
-    <input type="hidden" name="action" value="confirmarVenta">
-    
-    <!-- Campo para ingresar la fecha de la venta -->
-    <div class="form-group">
-        <label for="fechaVenta">Fecha de la venta:</label>
-        <input type="date" id="fechaVenta" name="fechaVenta" class="form-control" required>
-    </div>
+                    <form action="VentaServlet" method="post" class="mt-4" onsubmit="confirmarVenta(event)">
+                        <input type="hidden" name="action" value="confirmarVenta">
+                        
+                        <!-- Campo para ingresar la fecha de la venta -->
+                        <div class="form-group">
+                            <label for="fechaVenta">Fecha de la venta:</label>
+                            <input type="date" id="fechaVenta" name="fechaVenta" class="form-control" required>
+                        </div>
 
-    <!-- Botón para confirmar la venta -->
-    <button type="submit" class="btn btn-success mt-4">Confirmar Venta</button>
-</form>
-
+                        <!-- Botón para confirmar la venta -->
+                        <button type="submit" class="btn btn-success mt-4">Confirmar Venta</button>
+                    </form>
                     <% } %>
                 </div>
             </main>
@@ -126,7 +134,3 @@
     </div>
 </body>
 </html>
-
-
-
-

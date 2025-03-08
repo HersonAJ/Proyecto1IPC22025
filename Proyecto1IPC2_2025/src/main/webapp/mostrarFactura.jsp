@@ -117,14 +117,28 @@
                         </table>
                     </div>
 
-                    <!-- Botón para imprimir -->
+                    <!-- Botones para imprimir y aceptar -->
                     <div class="mt-5 text-center">
                         <button onclick="window.print()" class="btn btn-primary btn-imprimir">Imprimir / Descargar PDF</button>
+                        <form action="buscarCliente.jsp" method="post" class="d-inline" onsubmit="limpiarSesion(event);">
+                            <button type="submit" class="btn btn-success">Aceptar</button>
+                        </form>
                     </div>
                 </div>
             </main>
         </div>
     </div>
+
+    <script>
+        // Función para limpiar los datos de sesión excepto el usuario logeado
+        function limpiarSesion(event) {
+            <% 
+                // Eliminar los datos de sesión relacionados con la venta
+                session.removeAttribute("cliente");
+                session.removeAttribute("detalleVenta");
+            %>
+            console.log("Datos de la sesión relacionados con la venta han sido eliminados.");
+        }
+    </script>
 </body>
 </html>
-
