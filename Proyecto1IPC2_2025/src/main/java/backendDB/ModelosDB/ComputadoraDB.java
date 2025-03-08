@@ -4,6 +4,7 @@
  */
 package backendDB.ModelosDB;
 
+import Modelos.Componente;
 import Modelos.Computadora;
 import backendDB.ConexionDB;
 import java.sql.Connection;
@@ -11,19 +12,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author herson
  */
 public class ComputadoraDB {
-    
+
     // Método para registrar una computadora
     public static boolean registrarComputadora(Computadora computadora) {
         String sql = "INSERT INTO Computadoras (nombre, precio_venta, costo_total) VALUES (?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, computadora.getNombre());
             stmt.setDouble(2, computadora.getPrecioVenta());
             stmt.setDouble(3, computadora.getCostoTotal());
@@ -39,11 +41,10 @@ public class ComputadoraDB {
     public static Computadora obtenerComputadora(int idComputadora) throws SQLException {
         Computadora computadora = null;
         String query = "SELECT * FROM Computadoras WHERE id_computadora = ?";
-        
-        try (Connection con = ConexionDB.getConnection(); 
-             PreparedStatement ps = con.prepareStatement(query)) {
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, idComputadora);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     computadora = new Computadora();
@@ -56,15 +57,13 @@ public class ComputadoraDB {
         }
         return computadora;
     }
-    
-        // Método para obtener todas las computadoras
+
+    // Método para obtener todas las computadoras
     public static List<Computadora> obtenerComputadoras() throws SQLException {
         List<Computadora> computadoras = new ArrayList<>();
         String query = "SELECT * FROM Computadoras";
-        
-        try (Connection con = ConexionDB.getConnection(); 
-             PreparedStatement ps = con.prepareStatement(query); 
-             ResultSet rs = ps.executeQuery()) {
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Computadora computadora = new Computadora();
                 computadora.setIdComputadora(rs.getInt("id_computadora"));
@@ -76,5 +75,54 @@ public class ComputadoraDB {
         }
         return computadoras;
     }
-}
 
+    
+    
+    
+    //metodo usado por el vendedor para obtener las computadoras disponibles 
+    public static List<Map<String, Object>> obtenerComputadorasConDetalles() throws SQLException {
+        List<Map<String, Object>> computadorasConDetalles = new ArrayList<>();
+        String query
+                = "SELECT "
+                + "    c.id_computadora, "
+                + "    c.nombre AS nombre_computadora, "
+                + "    c.precio_venta, "
+                + "    c.costo_total, "
+                + "    c.estado, "
+                + "    e.fecha_ensamblaje, "
+                + "    u.nombre_usuario AS ensamblador, "
+                + "    GROUP_CONCAT(CONCAT(cmp.nombre, ' (', ep.cantidad, ')') SEPARATOR ', ') AS componentes "
+                + "FROM "
+                + "    Computadoras c "
+                + "LEFT JOIN "
+                + "    Ensamblaje e ON c.id_computadora = e.id_computadora "
+                + "LEFT JOIN "
+                + "    Usuarios u ON e.id_usuario = u.id_usuario "
+                + "LEFT JOIN "
+                + "    Ensamblaje_Piezas ep ON c.id_computadora = ep.id_computadora "
+                + "LEFT JOIN "
+                + "    Componentes cmp ON ep.id_componente = cmp.id_componente "
+                + "WHERE "
+                + "    c.estado = 'En Sala de Venta' "
+                + "GROUP BY "
+                + "    c.id_computadora, c.nombre, c.precio_venta, c.costo_total, c.estado, e.fecha_ensamblaje, u.nombre_usuario";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Map<String, Object> computadora = new HashMap<>();
+                computadora.put("idComputadora", rs.getInt("id_computadora"));
+                computadora.put("nombre", rs.getString("nombre_computadora"));
+                computadora.put("precioVenta", rs.getDouble("precio_venta"));
+                computadora.put("estado", rs.getString("estado"));
+                computadora.put("ensamblador", rs.getString("ensamblador"));
+                computadora.put("fechaEnsamblaje", rs.getDate("fecha_ensamblaje"));
+                computadora.put("componentes", rs.getString("componentes")); // Lista de componentes concatenados
+                computadorasConDetalles.add(computadora);
+            }
+        }
+
+        return computadorasConDetalles;
+    }
+
+}
