@@ -68,7 +68,7 @@
                 <a href="consultarDisponibles.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-display me-2"></i>Consultar Computadoras Disponibles
                 </a>
-                <a href="consultarVentasDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="mostrarNumeroFactura.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-calendar-day me-2"></i>Consultar Detalles Factura
                 </a>
                 <a href="consultarVentasDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
