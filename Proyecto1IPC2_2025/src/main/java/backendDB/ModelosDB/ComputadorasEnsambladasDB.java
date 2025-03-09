@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class ComputadorasEnsambladasDB {
 
-    // Método para registrar una computadora ensamblada
+    // Método para registrar una computadora ensamblada y desde la base de datos se configura como "Ensamblada"
 public static boolean registrarEnsamblaje(String nombreComputadora, String nombreUsuario, String fecha) {
     String consultaSQL = "INSERT INTO ComputadorasEnsambladas (id_tipo_computadora, usuario_ensamblador, costo_total, fecha_ensamblaje) " +
                          "SELECT tc.id_tipo_computadora, u.id_usuario, " +

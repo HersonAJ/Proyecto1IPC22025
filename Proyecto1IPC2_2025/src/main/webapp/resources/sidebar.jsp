@@ -37,7 +37,7 @@
                 <a href="gestionarComponentes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-tools me-2"></i>Gestionar Componentes
                 </a>
-                <a href="ensamblajeComputadora.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="EnsamblarComputadora2Servlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cpu me-2"></i>Ensamblar Computadoras
                 </a>
                 <a href="registrarComputadoras.jsp" class="list-group-item list-group-item-action bg-primary text-white">
