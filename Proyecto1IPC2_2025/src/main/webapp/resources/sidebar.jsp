@@ -71,7 +71,7 @@
                 <a href="mostrarNumeroFactura.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-calendar-day me-2"></i>Consultar Detalles Factura
                 </a>
-                <a href="consultarVentasDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="ventasDelDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-calendar-day me-2"></i>Consultar Ventas del Día
                 </a>
                 <% }%>
