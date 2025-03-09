@@ -87,6 +87,7 @@ public static boolean registrarComponente(Componente componente) {
 
     // Método para obtener todos los componentes activos
     //lo utiliza GestionComponenteServlet
+    //lo utiliza gestionTipoComputadoras.jsp
     public static List<Componente> obtenerComponentes() throws SQLException {
         List<Componente> componentes = new ArrayList<>();
         String query = "SELECT * FROM Componentes WHERE estado = 'activo'";

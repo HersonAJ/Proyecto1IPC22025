@@ -25,6 +25,8 @@ public class ProcesadorArchivo {
                     ProcesarComponente.procesarComponente(linea, logProcesamiento);
                 } else if (linea.startsWith("COMPUTADORA")) {
                     ProcesarComputadora.procesarComputadora(linea, logProcesamiento);
+                } else if (linea.startsWith("ENSAMBLE_PIEZAS")) {
+                    ProcesarEnsamblajePiezas.procesarEnsamblaje(linea, logProcesamiento);
                 } else {
                     logProcesamiento.add("Instrucción no reconocida: " + linea);
                 }
