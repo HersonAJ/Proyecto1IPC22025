@@ -5,8 +5,14 @@
 <%@ include file="/resources/header.jsp" %>
 
 <%
-    List<Componente> componentes = ComponenteDB.obtenerComponentes();
-    request.setAttribute("componentes", componentes);
+    List<Componente> componentes = null;
+    String mensaje = (String) request.getAttribute("mensaje");
+    String error = (String) request.getAttribute("error");
+    try {
+        componentes = ComponenteDB.obtenerComponentes();
+    } catch (Exception e) {
+        error = "No se pudieron cargar los componentes: " + e.getMessage();
+    }
 %>
 
 <!DOCTYPE html>
@@ -49,28 +55,46 @@
                 <jsp:include page="/resources/sidebar.jsp" />
             </aside>
             <main class="col-md-9">
-                <div class="container">
-                    <h2 class="mt-4">Gestionar Componentes</h2>
+                <div class="container mt-4">
+                    <h2>Gestionar Componentes</h2>
+
+                    <!-- Mostrar mensajes de éxito o error -->
+                    <% if (mensaje != null) { %>
+                        <div class="alert alert-success">
+                            <%= mensaje %>
+                        </div>
+                    <% } %>
+                    <% if (error != null) { %>
+                        <div class="alert alert-danger">
+                            <%= error %>
+                        </div>
+                    <% } %>
+
+                    <!-- Botón para mostrar/ocultar formulario de agregar -->
                     <button class="btn btn-primary mb-3" onclick="toggleFormularioAgregar()">Agregar Componente</button>
+
+                    <!-- Formulario para agregar un nuevo componente -->
                     <div id="formularioAgregar" style="display:none;">
                         <form action="GestionComponentesServlet" method="post">
                             <div class="form-group">
                                 <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del componente" required>
                             </div>
                             <div class="form-group">
                                 <label for="costo">Costo:</label>
-                                <input type="number" step="0.01" class="form-control" id="costo" name="costo" required>
+                                <input type="number" step="0.01" class="form-control" id="costo" name="costo" placeholder="Ingrese el costo del componente" required>
                             </div>
                             <div class="form-group">
                                 <label for="cantidadDisponible">Cantidad Disponible:</label>
-                                <input type="number" class="form-control" id="cantidadDisponible" name="cantidadDisponible" required>
+                                <input type="number" class="form-control" id="cantidadDisponible" name="cantidadDisponible" placeholder="Ingrese la cantidad inicial" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </form>
                     </div>
-                    <table class="table table-striped mt-4">
-                        <thead>
+
+                    <!-- Tabla de componentes -->
+                    <table class="table table-striped table-hover mt-4">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
@@ -80,42 +104,42 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%
-                                if (componentes != null) {
-                                    for (Componente componente : componentes) {
-                            %>
-                            <tr>
-                                <td><%= componente.getIdComponente() %></td>
-                                <td><%= componente.getNombre() %></td>
-                                <td><%= componente.getCosto() %></td>
-                                <td><%= componente.getCantidadDisponible() %></td>
-                                <td>
-                                    <button class="btn btn-warning" onclick="toggleFormularioEditar(<%= componente.getIdComponente() %>)">Editar</button>
-                                    <button class="btn btn-danger" onclick="confirmarEliminacion(<%= componente.getIdComponente() %>)">Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr id="formularioEditar_<%= componente.getIdComponente() %>" style="display:none;">
-                                <td colspan="5">
-                                    <form action="GestionComponentesServlet" method="post">
-                                        <input type="hidden" id="idComponenteEditar" name="idComponente" value="<%= componente.getIdComponente() %>">
-                                        <div class="form-group">
-                                            <label for="nombreEditar">Nombre:</label>
-                                            <input type="text" class="form-control" id="nombreEditar" name="nombre" value="<%= componente.getNombre() %>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="costoEditar">Costo:</label>
-                                            <input type="number" step="0.01" class="form-control" id="costoEditar" name="costo" value="<%= componente.getCosto() %>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
-                                            <input type="number" class="form-control" id="cantidadDisponibleEditar" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <% } 
-                               } else { %>
+                            <% if (componentes != null && !componentes.isEmpty()) {
+                                for (Componente componente : componentes) { %>
+                                <tr>
+                                    <td><%= componente.getIdComponente() %></td>
+                                    <td><%= componente.getNombre() %></td>
+                                    <td>Q<%= String.format("%.2f", componente.getCosto()) %></td>
+                                    <td><%= componente.getCantidadDisponible() %></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" onclick="toggleFormularioEditar(<%= componente.getIdComponente() %>)">Editar</button>
+                                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion(<%= componente.getIdComponente() %>)">Eliminar</button>
+                                    </td>
+                                </tr>
+                                <tr id="formularioEditar_<%= componente.getIdComponente() %>" style="display:none;">
+                                    <td colspan="5">
+                                        <!-- Formulario para editar un componente existente -->
+                                        <h5>Editar Componente: <%= componente.getNombre() %></h5>
+                                        <form action="GestionComponentesServlet" method="post">
+                                            <input type="hidden" id="idComponenteEditar" name="idComponente" value="<%= componente.getIdComponente() %>">
+                                            <div class="form-group">
+                                                <label for="nombreEditar">Nombre:</label>
+                                                <input type="text" class="form-control" id="nombreEditar" name="nombre" value="<%= componente.getNombre() %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="costoEditar">Costo:</label>
+                                                <input type="number" step="0.01" class="form-control" id="costoEditar" name="costo" value="<%= componente.getCosto() %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
+                                                <input type="number" class="form-control" id="cantidadDisponibleEditar" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }
+                            } else { %>
                             <tr>
                                 <td colspan="5" class="text-center">No hay componentes disponibles</td>
                             </tr>

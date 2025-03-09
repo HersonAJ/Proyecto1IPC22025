@@ -48,11 +48,18 @@ public class Componente {
         this.nombre = nombre;
     }
 
-    public void setCosto(double consto) {
-        this.costo = consto;
+public void setCosto(double costo) {
+    if (costo < 0) {
+        throw new IllegalArgumentException("El costo no puede ser negativo.");
     }
+    this.costo = costo;
+}
 
-    public void setCantidadDisponible(int cantidadDisponible) {
-        this.cantidadDisponible = cantidadDisponible;
+public void setCantidadDisponible(int cantidadDisponible) {
+    if (cantidadDisponible < 0) {
+        throw new IllegalArgumentException("La cantidad disponible no puede ser negativa.");
     }
+    this.cantidadDisponible = cantidadDisponible;
+}
+
 }
