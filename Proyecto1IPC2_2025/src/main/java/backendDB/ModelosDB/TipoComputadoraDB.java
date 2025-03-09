@@ -81,4 +81,20 @@ public class TipoComputadoraDB {
         return listaTipos;
     }
 
+    //metodo que se utilizada para la instruccion de ensamblar computadora con el archivo
+    public static boolean existeTipoComputadora(String nombre) {
+        String consultaSQL = "SELECT COUNT(*) AS contador FROM TiposComputadoras WHERE nombre = ?";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(consultaSQL)) {
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("contador") > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al validar el tipo de computadora: " + e.getMessage());
+        }
+        return false;
+    }
+
 }

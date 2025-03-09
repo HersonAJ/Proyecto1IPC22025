@@ -19,8 +19,7 @@ public class UsuarioDB {
     //lo usa ProcesarUsuario desde el procesamiento del archivo de texto
     public static boolean registrarUsuario(Usuario usuario) {
         String sql = "INSERT INTO Usuarios (nombre_usuario, contraseña, id_rol) VALUES (?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombreUsuario());
             stmt.setString(2, usuario.getContraseña());
             stmt.setInt(3, usuario.getRol());
@@ -36,8 +35,7 @@ public class UsuarioDB {
     public static Usuario verificarCredenciales(String nombreUsuario, String contraseña) {
         Usuario usuario = null;
         String sql = "SELECT u.*, r.nombre_rol FROM Usuarios u JOIN Roles r ON u.id_rol = r.id_rol WHERE u.nombre_usuario = ? AND u.contraseña = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, nombreUsuario);
             stmt.setString(2, contraseña);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -114,8 +112,8 @@ public class UsuarioDB {
 
         return usuarios;
     }
-    
-        // Obtener información del usuario
+
+    // Obtener información del usuario
     //lo utiliza ReporteDevolucionesServlet
     //lo usar ReporteVentasServlet
     public static Usuario obtenerUsuario(int idUsuario) throws SQLException {
@@ -141,6 +139,22 @@ public class UsuarioDB {
             }
         }
         return usuario;
+    }
+
+    //este metodo lo usara el archivo cuando se ensable una computadora para verificar si el usuario existe
+    public static boolean existeUsuario(String nombreUsuario) {
+        String consultaSQL = "SELECT COUNT(*) AS contador FROM Usuarios WHERE nombre_usuario = ?";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(consultaSQL)) {
+            stmt.setString(1, nombreUsuario);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("contador") > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al validar el usuario: " + e.getMessage());
+        }
+        return false;
     }
 
 }
