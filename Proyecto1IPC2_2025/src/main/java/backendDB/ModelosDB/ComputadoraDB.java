@@ -23,6 +23,7 @@ import java.util.Map;
 public class ComputadoraDB {
 
     // Método para registrar una computadora
+    //lo usa el procesador de archivo
     public static boolean registrarComputadora(Computadora computadora) {
         String sql = "INSERT INTO Computadoras (nombre, precio_venta, costo_total) VALUES (?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -38,6 +39,8 @@ public class ComputadoraDB {
     }
 
     // Método para obtener una computadora específica por su ID
+    //lo usa ReporteGananciasServlet
+    //lo usao VentaServlet
     public static Computadora obtenerComputadora(int idComputadora) throws SQLException {
         Computadora computadora = null;
         String query = "SELECT * FROM Computadoras WHERE id_computadora = ?";
@@ -59,6 +62,8 @@ public class ComputadoraDB {
     }
 
     // Método para obtener todas las computadoras
+    //lo usa EliminarDetalleServlet
+    //lo usa VentaServlet
     public static List<Computadora> obtenerComputadoras() throws SQLException {
         List<Computadora> computadoras = new ArrayList<>();
         String query = "SELECT * FROM Computadoras";
@@ -123,6 +128,23 @@ public class ComputadoraDB {
         }
 
         return computadorasConDetalles;
+    }
+    
+        // Método para obtener el nombre de una computadora por su ID
+    //lo usa consultarComprasCliente.jsp
+    public static String obtenerNombreComputadora(int idComputadora) {
+        String sql = "SELECT nombre FROM Computadoras WHERE id_computadora = ?";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idComputadora);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nombre"); // Devuelve el nombre de la computadora
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Nombre no encontrado"; // Valor predeterminado si no se encuentra la computadora
     }
 
 }

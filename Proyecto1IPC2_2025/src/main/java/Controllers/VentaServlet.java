@@ -15,8 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,26 +45,34 @@ public class VentaServlet extends HttpServlet {
 
         if ("cargarComputadoras".equals(action)) {
 
-            System.out.println("Se esta ejecutando la accion de cargar computadoras");
-
-            // Acción para cargar la información inicial
-            String nit = request.getParameter("nit");
-            System.out.println("el nit que se ingreso fue: " + nit);
-            Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
-            request.getSession().setAttribute("cliente", cliente); // Guardar cliente en sesión
-            request.setAttribute("cliente", cliente); // Pasar cliente al JSP
-
-            // Cargar computadoras desde la base de datos
-            List<Computadora> computadoras = null;
             try {
-                computadoras = ComputadoraDB.obtenerComputadoras();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            request.setAttribute("computadoras", computadoras);
 
-            // Redirigir al JSP de selección
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+                System.out.println("Se esta ejecutando la accion de cargar computadoras");
+
+                // Acción para cargar la información inicial
+                String nit = request.getParameter("nit");
+                System.out.println("el nit que se ingreso fue: " + nit);
+                Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
+                request.getSession().setAttribute("cliente", cliente); // Guardar cliente en sesión
+                request.setAttribute("cliente", cliente); // Pasar cliente al JSP
+
+                // Cargar computadoras desde la base de datos
+                List<Computadora> computadoras = null;
+                try {
+                    computadoras = ComputadoraDB.obtenerComputadoras();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                request.setAttribute("computadoras", computadoras);
+
+                // Redirigir al JSP de selección
+                request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage());
+                ex.printStackTrace();
+
+            }
 
         } else if ("agregarComputadora".equals(action)) {
             System.out.println("Se está ejecutando la acción de agregarComputadora");

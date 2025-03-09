@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 
 @WebServlet("/RegistroServlet")
-public class Registro extends HttpServlet {
+public class RegistroUsuariosServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");

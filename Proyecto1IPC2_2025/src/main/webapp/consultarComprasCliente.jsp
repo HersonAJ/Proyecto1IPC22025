@@ -133,7 +133,7 @@
                                                             if (detalles != null && !detalles.isEmpty()) {
                                                                 for (DetalleVenta detalle : detalles) {
                                                                     totalVenta += detalle.getSubtotal();
-                                                                    String productoNombre = ComprasClienteDB.obtenerNombreComputadora(detalle.getIdComputadora());
+                                                                    String productoNombre = ComputadoraDB.obtenerNombreComputadora(detalle.getIdComputadora());
                                                         %>
                                                                     <tr>
                                                                         <td><%= productoNombre %></td>

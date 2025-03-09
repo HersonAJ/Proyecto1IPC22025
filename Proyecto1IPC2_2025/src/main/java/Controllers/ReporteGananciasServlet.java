@@ -9,10 +9,10 @@ import Modelos.DetalleVenta;
 import Modelos.Devolucion;
 import Modelos.Venta;
 import backendDB.ModelosDB.ComputadoraDB;
+import backendDB.ModelosDB.DetalleVentaDB;
 import backendDB.ModelosDB.DevolucionDB;
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -49,7 +49,7 @@ public class ReporteGananciasServlet extends HttpServlet {
             // Calcular las ganancias de las ventas
             List<Computadora> computadorasVendidas = new ArrayList<>();
             for (Venta venta : ventas) {
-                List<DetalleVenta> detallesVenta = VentaDB.obtenerDetallesVenta(venta.getIdVenta());
+                List<DetalleVenta> detallesVenta = DetalleVentaDB.obtenerDetallesVentaReportes(venta.getIdVenta());
                 for (DetalleVenta detalle : detallesVenta) {
                     Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
                     double ganancia = (computadora.getPrecioVenta() - computadora.getCostoTotal()) * detalle.getCantidad();
