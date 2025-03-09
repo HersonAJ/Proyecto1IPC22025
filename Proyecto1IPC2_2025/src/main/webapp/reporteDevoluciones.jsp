@@ -1,3 +1,4 @@
+<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
 <%@page import="Modelos.Computadora"%>
 <%@page import="Modelos.Venta"%>
 <%@page import="backendDB.ModelosDB.VentaDB"%>
@@ -121,7 +122,7 @@
                                                 <td><%= detalle.getIdComputadora() %></td>
                                                 <td>
                                                     <%
-                                                        Computadora computadora = VentaDB.obtenerComputadora(detalle.getIdComputadora());
+                                                        Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
                                                         if (computadora != null) {
                                                             out.print(computadora.getNombre());
                                                         }

@@ -13,6 +13,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +24,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ClienteServlet", urlPatterns = {"/ClienteServlet"})
 public class ClienteServlet extends HttpServlet {
 
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,11 +36,17 @@ public class ClienteServlet extends HttpServlet {
             if (nit == null || nit.trim().isEmpty()) {
                 request.setAttribute("error", "Debe ingresar un NIT válido.");
             } else {
-                Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
-                if (cliente != null) {
-                    request.setAttribute("cliente", cliente);
-                } else {
-                    request.setAttribute("clienteNoEncontrado", nit);
+                try {
+                    Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
+                    if (cliente != null) {
+                        request.setAttribute("cliente", cliente);
+                    } else {
+                        request.setAttribute("clienteNoEncontrado", nit);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                    ex.printStackTrace(); 
+
                 }
             }
             // Redirigir a la vista
@@ -50,20 +58,26 @@ public class ClienteServlet extends HttpServlet {
             String nombre = request.getParameter("nombre");
             String direccion = request.getParameter("direccion");
 
-            if (nit != null && !nit.trim().isEmpty() && 
-                nombre != null && !nombre.trim().isEmpty() && 
-                direccion != null && !direccion.trim().isEmpty()) {
-                
+            if (nit != null && !nit.trim().isEmpty()
+                    && nombre != null && !nombre.trim().isEmpty()
+                    && direccion != null && !direccion.trim().isEmpty()) {
+
                 Cliente nuevoCliente = new Cliente();
                 nuevoCliente.setNit(nit);
                 nuevoCliente.setNombre(nombre);
                 nuevoCliente.setDireccion(direccion);
-                
+
                 boolean registrado = ClienteDB.registrarCliente(nuevoCliente);
                 if (registrado) {
-                    // Recuperar el cliente recién creado
-                    Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
-                    request.setAttribute("cliente", cliente);
+                    try {
+                        // Recuperar el cliente recién creado
+                        Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
+                        request.setAttribute("cliente", cliente);
+                    } catch (SQLException ex) {
+                        System.out.println("Error: " + ex.getMessage());
+                        ex.printStackTrace(); 
+
+                    }
                 } else {
                     request.setAttribute("error", "No se pudo registrar al cliente.");
                 }
@@ -75,5 +89,3 @@ public class ClienteServlet extends HttpServlet {
         }
     }
 }
-
-

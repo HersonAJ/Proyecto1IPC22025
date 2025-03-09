@@ -25,6 +25,8 @@ import java.util.Map;
 public class VentaDB {
 
     // Obtener todas las ventas en un intervalo de tiempo
+    //lo usa reporteGananciasServlet
+    //lo usa ReporteVentasServlet
     public static List<Venta> obtenerVentas(String fechaInicio, String fechaFin) throws SQLException {
         List<Venta> ventas = new ArrayList<>();
         String query = "SELECT * FROM Ventas WHERE fecha_venta BETWEEN ? AND ?";
@@ -46,76 +48,6 @@ public class VentaDB {
             }
         }
         return ventas;
-    }
-
-    // Obtener detalles de una venta específica
-    public static List<DetalleVenta> obtenerDetallesVenta(int idVenta) throws SQLException {
-        List<DetalleVenta> detalles = new ArrayList<>();
-        String query = "SELECT * FROM Detalle_Ventas WHERE id_venta = ?";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, idVenta);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    DetalleVenta detalle = new DetalleVenta();
-                    detalle.setIdDetalleVenta(rs.getInt("id_detalle_venta"));
-                    detalle.setIdVenta(rs.getInt("id_venta"));
-                    detalle.setIdComputadora(rs.getInt("id_computadora"));
-                    detalle.setCantidad(rs.getInt("cantidad"));
-                    detalle.setSubtotal(rs.getDouble("subtotal"));
-                    detalles.add(detalle);
-                }
-            }
-        }
-        return detalles;
-    }
-
-    // Obtener información del cliente
-    public static Cliente obtenerCliente(int idCliente) throws SQLException {
-        Cliente cliente = null;
-        String query = "SELECT * FROM Clientes WHERE id_cliente = ?";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, idCliente);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    cliente = new Cliente();
-                    cliente.setIdCliente(rs.getInt("id_cliente"));
-                    cliente.setNit(rs.getString("nit"));
-                    cliente.setNombre(rs.getString("nombre"));
-                    cliente.setDireccion(rs.getString("direccion"));
-                }
-            }
-        }
-        return cliente;
-    }
-
-    // Obtener información del usuario
-    public static Usuario obtenerUsuario(int idUsuario) throws SQLException {
-        Usuario usuario = null;
-        String query = "SELECT Usuarios.id_usuario, Usuarios.nombre_usuario, Usuarios.contraseña, Usuarios.id_rol, Roles.nombre_rol, Usuarios.estado "
-                + "FROM Usuarios "
-                + "JOIN Roles ON Usuarios.id_rol = Roles.id_rol "
-                + "WHERE Usuarios.id_usuario = ?";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, idUsuario);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("id_usuario"));
-                    usuario.setNombreUsuario(rs.getString("nombre_usuario"));
-                    usuario.setContraseña(rs.getString("contraseña"));
-                    usuario.setRol(rs.getInt("id_rol"));
-                    usuario.setRolNombre(rs.getString("nombre_rol")); // Cambiado a "nombre_rol"
-                    usuario.setEstado(rs.getString("estado"));
-                }
-            }
-        }
-        return usuario;
     }
 
     //metodos para funciones del vendedor 
@@ -158,23 +90,6 @@ public class VentaDB {
         }
     }
 
-    public static boolean registrarDetalleVenta(DetalleVenta detalle) {
-        String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, detalle.getIdVenta());
-            stmt.setInt(2, detalle.getIdComputadora());
-            stmt.setInt(3, detalle.getCantidad());
-            stmt.setDouble(4, detalle.getSubtotal());
-
-            int filasInsertadas = stmt.executeUpdate();
-            return filasInsertadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    
     
 //metodo para el registro de ventas del dia del vendedor
     public static List<Map<String, Object>> obtenerVentasPorFecha(String fecha) throws SQLException {
@@ -227,4 +142,26 @@ public class VentaDB {
         return ventas;
     }
 
+        // Obtener una venta específica por su ID lo usa reporteDevoluciones.jsp
+     public static Venta obtenerVenta(int idVenta) throws SQLException {
+         Venta venta = null;
+         String query = "SELECT * FROM Ventas WHERE id_venta = ?";
+         
+         try (Connection con = ConexionDB.getConnection(); 
+              PreparedStatement ps = con.prepareStatement(query)) {
+             ps.setInt(1, idVenta);
+             
+             try (ResultSet rs = ps.executeQuery()) {
+                 if (rs.next()) {
+                     venta = new Venta();
+                     venta.setIdVenta(rs.getInt("id_venta"));
+                     venta.setIdCliente(rs.getInt("id_cliente"));
+                     venta.setIdUsuario(rs.getInt("id_usuario"));
+                     venta.setFechaVenta(rs.getDate("fecha_venta"));
+                     venta.setTotalVenta(rs.getDouble("total_venta"));
+                 }
+             }
+         }
+         return venta;
+     }
 }

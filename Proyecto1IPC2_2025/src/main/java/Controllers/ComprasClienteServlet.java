@@ -6,9 +6,9 @@ package Controllers;
 
 import Modelos.Cliente;
 import Modelos.Venta;
+import backendDB.ModelosDB.ClienteDB;
 import backendDB.ModelosDB.ComprasClienteDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -41,7 +41,7 @@ public class ComprasClienteServlet extends HttpServlet {
             }
 
             // Obtener el cliente por NIT
-            Cliente cliente = ComprasClienteDB.obtenerClientePorNit(nit);
+            Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
             if (cliente == null) {
                 request.setAttribute("error", "No se encontró un cliente con el NIT proporcionado.");
                 request.getRequestDispatcher("buscarCliente.jsp").forward(request, response);

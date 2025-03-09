@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class UsuarioDB {
 
+    //lo usa RegistroServlet
+    //lo usa ProcesarUsuario desde el procesamiento del archivo de texto
     public static boolean registrarUsuario(Usuario usuario) {
         String sql = "INSERT INTO Usuarios (nombre_usuario, contraseña, id_rol) VALUES (?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection();
@@ -30,6 +32,7 @@ public class UsuarioDB {
         }
     }
 
+    //lo usa LoginServlet
     public static Usuario verificarCredenciales(String nombreUsuario, String contraseña) {
         Usuario usuario = null;
         String sql = "SELECT u.*, r.nombre_rol FROM Usuarios u JOIN Roles r ON u.id_rol = r.id_rol WHERE u.nombre_usuario = ? AND u.contraseña = ?";
@@ -54,6 +57,7 @@ public class UsuarioDB {
     }
 
     // Método para obtener la lista de usuarios
+    //lo usa gestionarUsuarios.jsp
     public static List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         Connection conn = null;
@@ -110,4 +114,33 @@ public class UsuarioDB {
 
         return usuarios;
     }
+    
+        // Obtener información del usuario
+    //lo utiliza ReporteDevolucionesServlet
+    //lo usar ReporteVentasServlet
+    public static Usuario obtenerUsuario(int idUsuario) throws SQLException {
+        Usuario usuario = null;
+        String query = "SELECT Usuarios.id_usuario, Usuarios.nombre_usuario, Usuarios.contraseña, Usuarios.id_rol, Roles.nombre_rol, Usuarios.estado "
+                + "FROM Usuarios "
+                + "JOIN Roles ON Usuarios.id_rol = Roles.id_rol "
+                + "WHERE Usuarios.id_usuario = ?";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idUsuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("id_usuario"));
+                    usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+                    usuario.setContraseña(rs.getString("contraseña"));
+                    usuario.setRol(rs.getInt("id_rol"));
+                    usuario.setRolNombre(rs.getString("nombre_rol")); // Cambiado a "nombre_rol"
+                    usuario.setEstado(rs.getString("estado"));
+                }
+            }
+        }
+        return usuario;
+    }
+
 }

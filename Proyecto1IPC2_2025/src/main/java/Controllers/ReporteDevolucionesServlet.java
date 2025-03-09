@@ -8,11 +8,11 @@ import Modelos.Cliente;
 import Modelos.DetalleDevolucion;
 import Modelos.Devolucion;
 import Modelos.Usuario;
+import backendDB.ModelosDB.ClienteDB;
 import backendDB.ModelosDB.DetalleDevolucionDB;
 import backendDB.ModelosDB.DevolucionDB;
-import backendDB.ModelosDB.VentaDB;
+import backendDB.ModelosDB.UsuarioDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,8 +40,8 @@ public class ReporteDevolucionesServlet extends HttpServlet {
 
             // Recorrer las devoluciones para obtener los detalles adicionales
             for (Devolucion devolucion : devoluciones) {
-                Cliente cliente = VentaDB.obtenerCliente(devolucion.getIdCliente());
-                Usuario usuarioDevolucion = VentaDB.obtenerUsuario(devolucion.getIdUsuario());
+                Cliente cliente = ClienteDB.obtenerCliente(devolucion.getIdCliente());
+                Usuario usuarioDevolucion = UsuarioDB.obtenerUsuario(devolucion.getIdUsuario());
                 List<DetalleDevolucion> detallesDevolucion = DetalleDevolucionDB.obtenerDetallesDevolucion(devolucion.getIdDevolucion());
 
                 // Agregar la información adicional a la solicitud

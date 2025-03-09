@@ -8,9 +8,11 @@ import Modelos.Cliente;
 import Modelos.DetalleVenta;
 import Modelos.Usuario;
 import Modelos.Venta;
+import backendDB.ModelosDB.ClienteDB;
+import backendDB.ModelosDB.DetalleVentaDB;
+import backendDB.ModelosDB.UsuarioDB;
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,9 +42,9 @@ public class ReporteVentasServlet extends HttpServlet {
 
             // Recorrer las ventas para obtener los detalles adicionales
             for (Venta venta : ventas) {
-                Cliente cliente = VentaDB.obtenerCliente(venta.getIdCliente());
-                Usuario usuarioVenta = VentaDB.obtenerUsuario(venta.getIdUsuario());
-                List<DetalleVenta> detallesVenta = VentaDB.obtenerDetallesVenta(venta.getIdVenta());
+                Cliente cliente = ClienteDB.obtenerCliente(venta.getIdCliente());
+                Usuario usuarioVenta = UsuarioDB.obtenerUsuario(venta.getIdUsuario());
+                List<DetalleVenta> detallesVenta = DetalleVentaDB.obtenerDetallesVentaReportes(venta.getIdVenta());
 
                 // Agregar la información adicional a la solicitud
                 request.setAttribute("cliente_" + venta.getIdVenta(), cliente);

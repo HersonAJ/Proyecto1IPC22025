@@ -1,3 +1,6 @@
+<%@page import="backendDB.ModelosDB.DetalleVentaDB"%>
+<%@page import="backendDB.ModelosDB.UsuarioDB"%>
+<%@page import="backendDB.ModelosDB.ClienteDB"%>
 <%@page import="backendDB.ModelosDB.ComputadoraDB"%>
 <%@page import="Modelos.DetalleVenta"%>
 <%@page import="backendDB.ModelosDB.VentaDB"%>
@@ -74,7 +77,7 @@
                                 <td><%= venta.getFechaVenta() %></td>
                                 <td>
                                     <%
-                                        Cliente cliente = VentaDB.obtenerCliente(venta.getIdCliente());
+                                        Cliente cliente = ClienteDB.obtenerCliente(venta.getIdCliente());
                                         if (cliente != null) {
                                             out.print(cliente.getNombre());
                                         }
@@ -82,7 +85,7 @@
                                 </td>
                                 <td>
                                     <%
-                                        Usuario usuarioGanancia = VentaDB.obtenerUsuario(venta.getIdUsuario());
+                                        Usuario usuarioGanancia = UsuarioDB.obtenerUsuario(venta.getIdUsuario());
                                         if (usuarioGanancia != null) {
                                             out.print(usuarioGanancia.getNombreUsuario());
                                         }
@@ -92,9 +95,9 @@
                                 <td>
                                     <ul>
                                     <%
-                                        List<DetalleVenta> detallesVenta = VentaDB.obtenerDetallesVenta(venta.getIdVenta());
+                                        List<DetalleVenta> detallesVenta = DetalleVentaDB.obtenerDetallesVenta(venta.getIdVenta());
                                         for (DetalleVenta detalle : detallesVenta) {
-                                            Computadora computadora = VentaDB.obtenerComputadora(detalle.getIdComputadora());
+                                            Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
                                             if (computadora != null) {
                                     %>
                                     <li><%= computadora.getNombre() %> (<%= detalle.getCantidad() %> unidades)</li>
@@ -128,7 +131,7 @@
                                 <td><%= devolucion.getFechaDevolucion() %></td>
                                 <td>
                                     <%
-                                        Cliente cliente = VentaDB.obtenerCliente(devolucion.getIdCliente());
+                                        Cliente cliente = ClienteDB.obtenerCliente(devolucion.getIdCliente());
                                         if (cliente != null) {
                                             out.print(cliente.getNombre());
                                         }
@@ -136,7 +139,7 @@
                                 </td>
                                 <td>
                                     <%
-                                        Usuario usuarioGanancia = VentaDB.obtenerUsuario(devolucion.getIdCliente());
+                                        Usuario usuarioGanancia = UsuarioDB.obtenerUsuario(devolucion.getIdCliente());
                                         if (usuarioGanancia != null) {
                                             out.print(usuarioGanancia.getNombreUsuario());
                                         }

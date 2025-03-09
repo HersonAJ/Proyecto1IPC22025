@@ -7,9 +7,9 @@ package Controllers;
 import Modelos.Cliente;
 import Modelos.DetalleVenta;
 import Modelos.Venta;
+import backendDB.ModelosDB.DetalleVentaDB;
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -85,7 +85,7 @@ public class RegistrarVentaServlet extends HttpServlet {
             // Registrar los detalles de la venta
             for (DetalleVenta detalle : detalleVenta) {
                 detalle.setIdVenta(venta.getIdVenta());
-                VentaDB.registrarDetalleVenta(detalle);
+                DetalleVentaDB.registrarDetalleVenta(detalle);
             }
 
             // Redirigir al JSP para mostrar la factura

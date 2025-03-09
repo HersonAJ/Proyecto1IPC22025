@@ -32,76 +32,50 @@ public class ClienteDB {
         }
     }
 
-    public static Cliente obtenerClientePorNit(String nit) {
+    
+    /*metodo utilizado por buscarCliente.jsp
+                            ComprasClienteDB
+                            ComprasClienteServlet
+*/
+    public static Cliente obtenerClientePorNit(String nit) throws SQLException {
+        Cliente cliente = null;
         String sql = "SELECT * FROM Clientes WHERE nit = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, nit);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setIdCliente(rs.getInt("id_cliente"));
-                cliente.setNit(rs.getString("nit"));
-                cliente.setNombre(rs.getString("nombre"));
-                cliente.setDireccion(rs.getString("direccion"));
-                return cliente;
-            } else {
-                return null; // Si el cliente no existe
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    cliente = new Cliente();
+                    cliente.setIdCliente(rs.getInt("id_cliente"));
+                    cliente.setNit(rs.getString("nit"));
+                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setDireccion(rs.getString("direccion"));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
+        return cliente;
     }
 
-    public static Cliente obtenerClientePorId(int idCliente) {
-        String sql = "SELECT * FROM Clientes WHERE id_cliente = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idCliente);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setIdCliente(rs.getInt("id_cliente"));
-                cliente.setNit(rs.getString("nit"));
-                cliente.setNombre(rs.getString("nombre"));
-                cliente.setDireccion(rs.getString("direccion"));
-                return cliente;
-            } else {
-                return null; // Si el cliente no existe
+        // Obtener información del cliente por su id
+    //se usa en VentaServlet cuando se hace una compra
+    public static Cliente obtenerCliente(int idCliente) throws SQLException {
+        Cliente cliente = null;
+        String query = "SELECT * FROM Clientes WHERE id_cliente = ?";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idCliente);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cliente = new Cliente();
+                    cliente.setIdCliente(rs.getInt("id_cliente"));
+                    cliente.setNit(rs.getString("nit"));
+                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setDireccion(rs.getString("direccion"));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
-    }
-
-    public static boolean actualizarCliente(Cliente cliente) {
-        String sql = "UPDATE Clientes SET nit = ?, nombre = ?, direccion = ? WHERE id_cliente = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, cliente.getNit());
-            stmt.setString(2, cliente.getNombre());
-            stmt.setString(3, cliente.getDireccion());
-            stmt.setInt(4, cliente.getIdCliente());
-            int filasActualizadas = stmt.executeUpdate();
-            return filasActualizadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean eliminarCliente(int idCliente) {
-        String sql = "DELETE FROM Clientes WHERE id_cliente = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idCliente);
-            int filasEliminadas = stmt.executeUpdate();
-            return filasEliminadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return cliente;
     }
 }

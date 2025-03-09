@@ -57,30 +57,6 @@ public class ComponenteDB {
     }
 
 
-    // Método para obtener un componente activo por su ID
-    public static Componente obtenerComponentePorId(int idComponente) throws SQLException {
-        Componente componente = null;
-        String query = "SELECT * FROM Componentes WHERE id_componente = ? AND estado = 'activo'";
-
-        try (Connection con = ConexionDB.getConnection(); 
-             PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, idComponente);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    componente = new Componente();
-                    componente.setIdComponente(rs.getInt("id_componente"));
-                    componente.setNombre(rs.getString("nombre"));
-                    componente.setCosto(rs.getDouble("costo"));
-                    componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
-                    componente.setEstado(rs.getString("estado"));
-                }
-            }
-        }
-        return componente;
-    }
-
-
     // Método para actualizar un componente
     public static boolean actualizarComponente(Componente componente) throws SQLException {
         String query = "UPDATE Componentes SET nombre = ?, costo = ?, cantidad_disponible = ? WHERE id_componente = ?";
@@ -135,6 +111,31 @@ public class ComponenteDB {
             int resultado = ps.executeUpdate();
             return resultado > 0;
         }
+    }
+    
+    
+    // Método para obtener un componente activo por su ID
+    //lo usa ensamblaeComputadora.jsp
+    public static Componente obtenerComponentePorId(int idComponente) throws SQLException {
+        Componente componente = null;
+        String query = "SELECT * FROM Componentes WHERE id_componente = ? AND estado = 'activo'";
+
+        try (Connection con = ConexionDB.getConnection(); 
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idComponente);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    componente = new Componente();
+                    componente.setIdComponente(rs.getInt("id_componente"));
+                    componente.setNombre(rs.getString("nombre"));
+                    componente.setCosto(rs.getDouble("costo"));
+                    componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+                    componente.setEstado(rs.getString("estado"));
+                }
+            }
+        }
+        return componente;
     }
 
 }

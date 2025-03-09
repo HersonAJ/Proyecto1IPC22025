@@ -19,48 +19,10 @@ import java.util.List;
  */
 public class DetalleVentaDB {
 
-    // Método para registrar un detalle de venta
-    public static boolean registrarDetalleVenta(DetalleVenta detalleVenta) {
-        String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, detalleVenta.getIdVenta());
-            stmt.setInt(2, detalleVenta.getIdComputadora());
-            stmt.setInt(3, detalleVenta.getCantidad());
-            stmt.setDouble(4, detalleVenta.getSubtotal());
 
-            int filasInsertadas = stmt.executeUpdate();
-            return filasInsertadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Método para obtener un detalle de venta específico por su ID
-    public static DetalleVenta obtenerDetalleVenta(int idDetalleVenta) {
-        String sql = "SELECT * FROM Detalle_Ventas WHERE id_detalle_venta = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idDetalleVenta);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                DetalleVenta detalleVenta = new DetalleVenta();
-                detalleVenta.setIdDetalleVenta(rs.getInt("id_detalle_venta"));
-                detalleVenta.setIdVenta(rs.getInt("id_venta"));
-                detalleVenta.setIdComputadora(rs.getInt("id_computadora"));
-                detalleVenta.setCantidad(rs.getInt("cantidad"));
-                detalleVenta.setSubtotal(rs.getDouble("subtotal"));
-                return detalleVenta;
-            }
-            return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     // Método para obtener todos los detalles de una venta específica
+    //lo usa DetallesComprasClienteServlet
     public static List<DetalleVenta> obtenerDetallesVenta(int idVenta) {
         List<DetalleVenta> detalles = new ArrayList<>();
         String sql = "SELECT * FROM Detalle_Ventas WHERE id_venta = ?";
@@ -82,39 +44,49 @@ public class DetalleVentaDB {
         }
         return detalles;
     }
+    
+        // Obtener detalles de una venta específica
+    //lo usa ReporteGananciasServlet
+    //lo usa ReporteVentasServlet
+    public static List<DetalleVenta> obtenerDetallesVentaReportes(int idVenta) throws SQLException {
+        List<DetalleVenta> detalles = new ArrayList<>();
+        String query = "SELECT * FROM Detalle_Ventas WHERE id_venta = ?";
 
-    // Método para actualizar un detalle de venta
-    public static boolean actualizarDetalleVenta(DetalleVenta detalleVenta) {
-        String sql = "UPDATE Detalle_Ventas SET id_venta = ?, id_computadora = ?, cantidad = ?, subtotal = ? WHERE id_detalle_venta = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, detalleVenta.getIdVenta());
-            stmt.setInt(2, detalleVenta.getIdComputadora());
-            stmt.setInt(3, detalleVenta.getCantidad());
-            stmt.setDouble(4, detalleVenta.getSubtotal());
-            stmt.setInt(5, detalleVenta.getIdDetalleVenta());
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, idVenta);
 
-            int filasActualizadas = stmt.executeUpdate();
-            return filasActualizadas > 0;
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    DetalleVenta detalle = new DetalleVenta();
+                    detalle.setIdDetalleVenta(rs.getInt("id_detalle_venta"));
+                    detalle.setIdVenta(rs.getInt("id_venta"));
+                    detalle.setIdComputadora(rs.getInt("id_computadora"));
+                    detalle.setCantidad(rs.getInt("cantidad"));
+                    detalle.setSubtotal(rs.getDouble("subtotal"));
+                    detalles.add(detalle);
+                }
+            }
+        }
+        return detalles;
+    }
+    
+        //lo usa registrarVentaServlet
+    public static boolean registrarDetalleVenta(DetalleVenta detalle) {
+        String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, detalle.getIdVenta());
+            stmt.setInt(2, detalle.getIdComputadora());
+            stmt.setInt(3, detalle.getCantidad());
+            stmt.setDouble(4, detalle.getSubtotal());
+
+            int filasInsertadas = stmt.executeUpdate();
+            return filasInsertadas > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // Método para eliminar un detalle de venta
-    public static boolean eliminarDetalleVenta(int idDetalleVenta) {
-        String sql = "DELETE FROM Detalle_Ventas WHERE id_detalle_venta = ?";
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, idDetalleVenta);
 
-            int filasEliminadas = stmt.executeUpdate();
-            return filasEliminadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
 
