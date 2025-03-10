@@ -5,9 +5,11 @@
 package backendDB.ModelosDB;
 
 import Modelos.Cliente;
+import Modelos.ComputadoraEnsamblada;
 import Modelos.DetalleVenta;
 import Modelos.Venta;
 import backendDB.ConexionDB;
+import backendDB.ModelosDB.Vendedor.VendedorComputadoraDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,10 +69,7 @@ public class ComprasClienteDB {
         }
         return compras;
     }
-
-
-    
-    
+ 
     ///obtener todos los detalles de una factura
     //lo usa ConsultarFacturaServlet
     public static Map<String, Object> obtenerFacturaPorNumero(int numeroFactura) throws SQLException {

@@ -1,6 +1,5 @@
-<%@page import="backendDB.ModelosDB.ComprasClienteDB"%>
 <%@page import="backendDB.ModelosDB.DetalleVentaDB"%>
-<%@page import="backendDB.ModelosDB.ComputadoraDB"%> 
+<%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
 <%@page import="java.util.List"%>
 <%@page import="Modelos.Venta"%>
 <%@page import="Modelos.Cliente"%>
@@ -133,7 +132,7 @@
                                                             if (detalles != null && !detalles.isEmpty()) {
                                                                 for (DetalleVenta detalle : detalles) {
                                                                     totalVenta += detalle.getSubtotal();
-                                                                    String productoNombre = ComputadoraDB.obtenerNombreComputadora(detalle.getIdComputadora());
+                                                                    String productoNombre = VendedorConsultaComprasCliente.obtenerNombreComputadoraEnsamblada(detalle.getIdComputadora());
                                                         %>
                                                                     <tr>
                                                                         <td><%= productoNombre %></td>
