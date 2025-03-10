@@ -1,8 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="Modelos.Cliente"%>
-<%@page import="Modelos.Computadora"%>
+<%@page import="Modelos.ComputadoraEnsamblada"%>
 <%@page import="Modelos.DetalleVenta"%>
-<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -59,12 +58,13 @@
                             <select class="form-control" id="computadora" name="idComputadora" required>
                                 <option value="">-- Seleccionar --</option>
                                 <% 
-                                    List<Computadora> computadoras = (List<Computadora>) request.getAttribute("computadoras");
-                                    if (computadoras != null) {
-                                        for (Computadora computadora : computadoras) { 
+                                    List<ComputadoraEnsamblada> listaComputadoras = 
+                                        (List<ComputadoraEnsamblada>) request.getAttribute("computadoras");
+                                    if (listaComputadoras != null) {
+                                        for (ComputadoraEnsamblada computadora : listaComputadoras) { 
                                 %>
                                     <option value="<%= computadora.getIdComputadora() %>">
-                                        <%= computadora.getNombre() %> - Q<%= computadora.getPrecioVenta() %>
+                                        <%= computadora.getTipoComputadora().getNombre() %> - Q<%= computadora.getTipoComputadora().getPrecioVenta() %>
                                     </option>
                                 <% 
                                         } 
@@ -76,8 +76,11 @@
                     </form>
 
                     <!-- Lista de computadoras en la venta -->
-                    <% List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getAttribute("detalleVenta");
-                       if (detalleVenta != null && !detalleVenta.isEmpty()) { %>
+                    <% 
+                        List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getAttribute("detalleVenta");
+                        double totalVenta = 0; // Variable para calcular el total
+                        if (detalleVenta != null && !detalleVenta.isEmpty()) { 
+                    %>
                         <div class="mt-5">
                             <h4>Computadoras en la Venta</h4>
                             <table class="table table-bordered">
@@ -91,11 +94,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% for (DetalleVenta detalle : detalleVenta) { 
-                                           Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
+                                    <% 
+                                        for (DetalleVenta detalle : detalleVenta) { 
+                                            ComputadoraEnsamblada computadora = null;
+
+                                            // Buscar la computadora correspondiente al idComputadora
+                                            if (listaComputadoras != null) {
+                                                for (ComputadoraEnsamblada c : listaComputadoras) {
+                                                    if (c.getIdComputadora() == detalle.getIdComputadora()) {
+                                                        computadora = c;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            // Sumar al total de la venta
+                                            totalVenta += detalle.getSubtotal();
                                     %>
                                         <tr>
-                                            <td><%= computadora != null ? computadora.getNombre() : "Desconocido" %></td>
+                                            <td><%= computadora != null 
+                                                    ? computadora.getTipoComputadora().getNombre() 
+                                                    : "Desconocido" %></td>
                                             <td>Q<%= detalle.getSubtotal() / detalle.getCantidad() %></td>
                                             <td><%= detalle.getCantidad() %></td>
                                             <td>Q<%= detalle.getSubtotal() %></td>
@@ -110,6 +129,11 @@
                                     <% } %>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Mostrar el total -->
+                        <div class="mt-3">
+                            <h4>Total: Q<%= String.format("%.2f", totalVenta) %></h4>
                         </div>
                     <% } %>
 

@@ -1,7 +1,8 @@
-<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
+<%@page import="backendDB.ModelosDB.Vendedor.VendedorComputadoraDB"%>
 <%@page import="Modelos.Venta"%>
 <%@page import="Modelos.Cliente"%>
 <%@page import="Modelos.DetalleVenta"%>
+<%@page import="Modelos.ComputadoraEnsamblada"%>
 <%@page import="java.util.List"%>
 
 <!DOCTYPE html>
@@ -96,22 +97,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% int contador = 1;
-                                   double total = 0;
-                                   for (DetalleVenta detalle : detalleVenta) { 
-                                       total += detalle.getSubtotal(); %>
+                                <% 
+                                    if (detalleVenta != null && !detalleVenta.isEmpty()) { 
+                                        int contador = 1;
+                                        for (DetalleVenta detalle : detalleVenta) { 
+                                            // Obtener la computadora ensamblada desde el método VendedorComputadoraDB
+                                            ComputadoraEnsamblada computadora = VendedorComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
+                                %>
                                     <tr>
                                         <td><%= contador++ %></td>
-                                        <td><%= ComputadoraDB.obtenerComputadora(detalle.getIdComputadora()).getNombre() %></td>
+                                        <td><%= computadora != null ? computadora.getTipoComputadora().getNombre() : "Desconocido" %></td>
                                         <td><%= detalle.getCantidad() %></td>
                                         <td>Q<%= String.format("%.2f", detalle.getSubtotal() / detalle.getCantidad()) %></td>
                                         <td>Q<%= String.format("%.2f", detalle.getSubtotal()) %></td>
+                                    </tr>
+                                <% 
+                                        } 
+                                    } else { 
+                                %>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No hay artículos comprados.</td>
                                     </tr>
                                 <% } %>
                                 <!-- Fila de total en rojo -->
                                 <tr>
                                     <td colspan="4" class="text-right total-rojo">Total:</td>
-                                    <td class="total-rojo">Q<%= String.format("%.2f", total) %></td>
+                                    <td class="total-rojo">Q<%= String.format("%.2f", venta != null ? venta.getTotalVenta() : 0) %></td>
                                 </tr>
                             </tbody>
                         </table>

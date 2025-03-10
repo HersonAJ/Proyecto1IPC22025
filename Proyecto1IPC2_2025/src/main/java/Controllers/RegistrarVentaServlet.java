@@ -8,6 +8,7 @@ import Modelos.Cliente;
 import Modelos.DetalleVenta;
 import Modelos.Venta;
 import backendDB.ModelosDB.DetalleVentaDB;
+import backendDB.ModelosDB.Vendedor.VendedorComputadoraDB;
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -78,14 +79,14 @@ public class RegistrarVentaServlet extends HttpServlet {
         venta.setTotalVenta(totalVenta);
 
         // Registrar la venta en la base de datos
-        boolean ventaRegistrada = VentaDB.registrarVenta(venta);
+        boolean ventaRegistrada = VendedorComputadoraDB.registrarVenta(venta); // Cambiado a VendedorComputadoraDB
         if (ventaRegistrada) {
             System.out.println("Venta registrada con ID: " + venta.getIdVenta() + " y número de factura: " + venta.getNumeroFactura());
 
             // Registrar los detalles de la venta
             for (DetalleVenta detalle : detalleVenta) {
                 detalle.setIdVenta(venta.getIdVenta());
-                DetalleVentaDB.registrarDetalleVenta(detalle);
+                VendedorComputadoraDB.registrarDetalleVenta(detalle); // Cambiado a VendedorComputadoraDB
             }
 
             // Redirigir al JSP para mostrar la factura

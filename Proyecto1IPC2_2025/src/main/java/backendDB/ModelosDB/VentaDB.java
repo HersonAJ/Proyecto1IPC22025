@@ -52,6 +52,7 @@ public class VentaDB {
 
     //metodos para funciones del vendedor 
     // Método para registrar una venta
+    /*
     public static boolean registrarVenta(Venta venta) {
         String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta, numero_factura) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -89,7 +90,7 @@ public class VentaDB {
             return false;
         }
     }
-
+*/
     
 //metodo para el registro de ventas del dia del vendedor
     public static List<Map<String, Object>> obtenerVentasPorFecha(String fecha) throws SQLException {

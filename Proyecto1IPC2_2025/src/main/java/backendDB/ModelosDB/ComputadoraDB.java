@@ -39,8 +39,7 @@ public class ComputadoraDB {
     }
 
     // Método para obtener una computadora específica por su ID
-    //lo usa ReporteGananciasServlet
-    //lo usao VentaServlet
+    //lo usa ReporteGananciasServlet   
     public static Computadora obtenerComputadora(int idComputadora) throws SQLException {
         Computadora computadora = null;
         String query = "SELECT * FROM Computadoras WHERE id_computadora = ?";
@@ -60,28 +59,6 @@ public class ComputadoraDB {
         }
         return computadora;
     }
-
-    // Método para obtener todas las computadoras
-    //lo usa EliminarDetalleServlet
-    //lo usa VentaServlet
-    public static List<Computadora> obtenerComputadoras() throws SQLException {
-        List<Computadora> computadoras = new ArrayList<>();
-        String query = "SELECT * FROM Computadoras";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Computadora computadora = new Computadora();
-                computadora.setIdComputadora(rs.getInt("id_computadora"));
-                computadora.setNombre(rs.getString("nombre"));
-                computadora.setPrecioVenta(rs.getDouble("precio_venta"));
-                computadora.setCostoTotal(rs.getDouble("costo_total"));
-                computadoras.add(computadora);
-            }
-        }
-        return computadoras;
-    }
-
-    
     
     
     //metodo usado por el vendedor para obtener las computadoras disponibles 

@@ -5,9 +5,9 @@
 package Controllers;
 
 import Modelos.Cliente;
-import Modelos.Computadora;
+import Modelos.ComputadoraEnsamblada;
 import Modelos.DetalleVenta;
-import backendDB.ModelosDB.ComputadoraDB;
+import backendDB.ModelosDB.Vendedor.VendedorComputadoraDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -69,12 +69,12 @@ public class EliminarDetalleServlet extends HttpServlet {
         }
 
         // Volver a cargar la lista de computadoras para el selector
-        List<Computadora> computadoras = null;
+        List<ComputadoraEnsamblada> computadoras = null;
         try {
-            computadoras = ComputadoraDB.obtenerComputadoras();
+            computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas(); // Método actualizado
             System.out.println("Computadoras cargadas para el selector:");
-            for (Computadora computadora : computadoras) {
-                System.out.println("ID: " + computadora.getIdComputadora() + ", Nombre: " + computadora.getNombre());
+            for (ComputadoraEnsamblada computadora : computadoras) {
+                System.out.println("ID: " + computadora.getIdComputadora() + ", Tipo: " + computadora.getTipoComputadora().getNombre());
             }
         } catch (Exception e) {
             System.out.println("Error al cargar computadoras para el selector.");
