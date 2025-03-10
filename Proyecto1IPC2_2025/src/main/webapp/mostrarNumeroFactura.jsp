@@ -1,3 +1,4 @@
+<%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
 <%@page import="java.util.List"%>
 <%@page import="Modelos.Venta"%>
 <%@page import="Modelos.Cliente"%>
@@ -120,7 +121,8 @@
                                     %>
                                         <tr>
                                             <td><%= contador++ %></td>
-                                            <td><%= ComputadoraDB.obtenerComputadora(detalle.getIdComputadora()).getNombre() %></td>
+                                            <td><%= VendedorConsultaComprasCliente.obtenerNombreComputadoraEnsamblada(detalle.getIdComputadora()) %></td>
+
                                             <td><%= detalle.getCantidad() %></td>
                                             <td>Q<%= String.format("%.2f", detalle.getSubtotal() / detalle.getCantidad()) %></td>
                                             <td>Q<%= String.format("%.2f", detalle.getSubtotal()) %></td>
