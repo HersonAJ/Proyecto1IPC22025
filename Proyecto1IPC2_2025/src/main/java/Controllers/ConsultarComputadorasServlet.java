@@ -4,17 +4,15 @@
  */
 package Controllers;
 
-import backendDB.ModelosDB.ComputadoraDB;
+import Modelos.ComputadoraEnsamblada;
+import backendDB.ModelosDB.ComputadorasEnsambladasDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -26,24 +24,24 @@ public class ConsultarComputadorasServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Servlet ConsultarComputadorasServlet llamado."); // Indicador inicial de llamada al servlet
-        
+
         try {
-            // Llamar al método para obtener computadoras disponibles con detalles
-            System.out.println("Ejecutando el método obtenerComputadorasConDetalles...");
-            List<Map<String, Object>> computadorasDisponibles = ComputadoraDB.obtenerComputadorasConDetalles();
+            // Llamar al método para obtener detalles de computadoras ensambladas
+            System.out.println("Ejecutando el método obtenerDetallesComputadorasEnsambladas...");
+            List<ComputadoraEnsamblada> computadorasDisponibles = ComputadorasEnsambladasDB.obtenerDetallesComputadorasEnsambladas1();
 
             // Establecer la lista como atributo en la solicitud
             request.setAttribute("computadorasDisponibles", computadorasDisponibles);
 
             // Redirigir al JSP
             request.getRequestDispatcher("consultarComputadoras.jsp").forward(request, response);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             // Manejo de excepciones en caso de error de base de datos
-            System.out.println("Error al ejecutar el método obtenerComputadorasConDetalles: " + e.getMessage());
+            System.out.println("Error al ejecutar el método obtenerDetallesComputadorasEnsambladas: " + e.getMessage());
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Ocurrió un error al consultar las computadoras disponibles.");
+            request.setAttribute("error", "Ocurrió un error al consultar las computadoras ensambladas.");
+            request.setAttribute("computadorasDisponibles", null); // Asegurar que la lista esté vacía en caso de error
+            request.getRequestDispatcher("consultarComputadoras.jsp").forward(request, response);
         }
     }
 }
-

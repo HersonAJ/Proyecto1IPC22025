@@ -124,6 +124,84 @@ public static List<ComputadoraEnsamblada> obtenerComputadorasEnsambladas() {
     return lista;
 }
 
+//metodo para consultar computadoras ensambladas del ensamblador
+public static List<ComputadoraEnsamblada> obtenerDetallesComputadorasEnsambladas1() {
+    String consultaSQL = "SELECT ce.id_computadora, ce.costo_total, ce.fecha_ensamblaje, ce.estado, " +
+                         "tc.id_tipo_computadora, tc.nombre AS nombre_tipo, tc.precio_venta, " +
+                         "u.id_usuario, u.nombre_usuario, r.nombre_rol, " +
+                         "c.nombre AS componente_nombre, ep.cantidad AS componente_cantidad " +
+                         "FROM ComputadorasEnsambladas ce " +
+                         "JOIN TiposComputadoras tc ON ce.id_tipo_computadora = tc.id_tipo_computadora " +
+                         "JOIN Usuarios u ON ce.usuario_ensamblador = u.id_usuario " +
+                         "JOIN Roles r ON u.id_rol = r.id_rol " +
+                         "JOIN Ensamblaje_Piezas ep ON tc.id_tipo_computadora = ep.id_tipo_computadora " +
+                         "JOIN Componentes c ON ep.id_componente = c.id_componente " +
+                         "WHERE ce.estado = 'Ensamblada' " +  // Solo ensambladas
+                         "ORDER BY ce.id_computadora";
+    List<ComputadoraEnsamblada> lista = new ArrayList<>();
+
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(consultaSQL);
+         ResultSet rs = stmt.executeQuery()) {
+
+        // Mapeo para agrupar componentes por computadora
+        int idComputadoraActual = -1; // Para rastrear el ID actual
+        ComputadoraEnsamblada computadoraActual = null;
+
+        while (rs.next()) {
+            int idComputadora = rs.getInt("id_computadora");
+
+            // Si cambiamos a una nueva computadora, agregamos la anterior a la lista
+            if (idComputadora != idComputadoraActual) {
+                if (computadoraActual != null) {
+                    lista.add(computadoraActual);
+                }
+
+                // Crear nueva computadora ensamblada
+                computadoraActual = new ComputadoraEnsamblada();
+                computadoraActual.setIdComputadora(idComputadora);
+                computadoraActual.setCostoTotal(rs.getDouble("costo_total"));
+                computadoraActual.setFechaEnsamblaje(rs.getDate("fecha_ensamblaje"));
+                computadoraActual.setEstado(rs.getString("estado"));
+
+                // Mapear TipoComputadora
+                TipoComputadora tipo = new TipoComputadora();
+                tipo.setIdTipoComputadora(rs.getInt("id_tipo_computadora"));
+                tipo.setNombre(rs.getString("nombre_tipo"));
+                tipo.setPrecioVenta(rs.getDouble("precio_venta"));
+                computadoraActual.setTipoComputadora(tipo);
+
+                // Mapear Usuario
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+                usuario.setRolNombre(rs.getString("nombre_rol"));
+                computadoraActual.setUsuarioEnsamblador(usuario);
+
+                // Inicializar lista de componentes
+                computadoraActual.setComponentes(new ArrayList<>());
+
+                idComputadoraActual = idComputadora; // Actualizar el ID actual
+            }
+
+            // Mapear componente y agregarlo a la lista de componentes de la computadora actual
+            String nombreComponente = rs.getString("componente_nombre");
+            int cantidadComponente = rs.getInt("componente_cantidad");
+            computadoraActual.getComponentes().add(new String[] {nombreComponente, String.valueOf(cantidadComponente)});
+        }
+
+        // Agregar la última computadora a la lista si no se agregó antes
+        if (computadoraActual != null) {
+            lista.add(computadoraActual);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al obtener detalles de computadoras ensambladas: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return lista;
+}
 
 
 

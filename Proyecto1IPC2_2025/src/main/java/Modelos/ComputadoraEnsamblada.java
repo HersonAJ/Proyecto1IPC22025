@@ -5,6 +5,7 @@
 package Modelos;
 
 import java.sql.Date;
+import java.util.List;
 
 
 
@@ -20,6 +21,7 @@ public class ComputadoraEnsamblada {
     private Date fechaEnsamblaje;
     private Usuario usuarioEnsamblador;
     private String estado;
+    private List<String[]> componentes;
 
     public int getIdComputadora() {
         return idComputadora;
@@ -67,6 +69,14 @@ public class ComputadoraEnsamblada {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public List<String[]> getComponentes() {
+        return componentes;
+    }
+
+    public void setComponentes(List<String[]> componentes) {
+        this.componentes = componentes;
     }
     
 }
