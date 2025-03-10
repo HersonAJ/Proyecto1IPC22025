@@ -270,5 +270,59 @@ public static boolean registrarComponente(Componente componente) {
     return componentes;
 }
 
+    
+    //metodos para consultar componentes que usara el ensamblador se usan en ConsultarComponentesServlet
+    public static List<Componente> obtenerTodosLosComponentes() {
+    String consultaSQL = "SELECT * FROM Componentes";
+    List<Componente> lista = new ArrayList<>();
+
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(consultaSQL);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Componente componente = new Componente();
+            componente.setIdComponente(rs.getInt("id_componente"));
+            componente.setNombre(rs.getString("nombre"));
+            componente.setCosto(rs.getDouble("costo"));
+            componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+            componente.setEstado(rs.getString("estado"));
+            lista.add(componente);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al obtener todos los componentes: " + e.getMessage());
+    }
+
+    return lista;
+}
+
+    public static List<Componente> buscarComponentesPorNombre(String nombre) {
+    String consultaSQL = "SELECT * FROM Componentes WHERE nombre LIKE ?";
+    List<Componente> lista = new ArrayList<>();
+
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(consultaSQL)) {
+
+        stmt.setString(1, "%" + nombre + "%"); // Coincidencia parcial
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Componente componente = new Componente();
+            componente.setIdComponente(rs.getInt("id_componente"));
+            componente.setNombre(rs.getString("nombre"));
+            componente.setCosto(rs.getDouble("costo"));
+            componente.setCantidadDisponible(rs.getInt("cantidad_disponible"));
+            componente.setEstado(rs.getString("estado"));
+            lista.add(componente);
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error al buscar componentes por nombre: " + e.getMessage());
+    }
+
+    return lista;
+}
+
 
 }
