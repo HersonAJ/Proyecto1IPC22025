@@ -41,7 +41,7 @@ public class ComputadoraEnsamblada {
         return usuarioEnsamblador;
     }
 
-    public String getEstad() {
+    public String getEstado() {
         return estado;
     }
 

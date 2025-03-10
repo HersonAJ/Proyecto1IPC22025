@@ -40,7 +40,7 @@
                 <a href="EnsamblarComputadora2Servlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cpu me-2"></i>Ensamblar Computadoras
                 </a>
-                <a href="registrarComputadoras.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="ActualizarEstadoComputadoraServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-card-list me-2"></i>Registrar Computadoras Ensambladas
                 </a>
                 <a href="consultarComponentes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
