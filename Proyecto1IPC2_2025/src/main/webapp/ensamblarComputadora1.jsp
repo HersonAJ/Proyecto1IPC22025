@@ -1,5 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="Modelos.TipoComputadora" %>
 
 <%
@@ -17,13 +16,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ensamblar Computadora</title>
-    <%@ include file="/resources/resources.jsp" %> <!-- Recursos (Bootstrap, CSS, JS) -->
-    <script>
-        // Enviar el formulario para actualizar los componentes según la computadora seleccionada
-        function actualizarComponentes() {
-            document.getElementById("selectorComputadora").submit();
-        }
-    </script>
+    <%@ include file="/resources/resources.jsp" %>
+    <%@ include file="/resources/header.jsp" %>
 </head>
 <body>
     <div class="container-fluid">
@@ -50,11 +44,11 @@
                         </div>
                     <% } %>
 
-                    <!-- Selector de computadoras -->
-                    <form id="selectorComputadora" action="EnsamblarComputadora2Servlet" method="get">
+                    <!-- Formulario para seleccionar computadora -->
+                    <form action="EnsamblarComputadora2Servlet" method="post">
                         <div class="form-group">
                             <label for="computadora">Selecciona una computadora:</label>
-                            <select class="form-control" id="computadora" name="computadora" onchange="actualizarComponentes()">
+                            <select class="form-control" id="computadora" name="computadora" onchange="this.form.submit()">
                                 <option value="">-- Selecciona una computadora --</option>
                                 <% if (tiposComputadoras != null && !tiposComputadoras.isEmpty()) {
                                     for (TipoComputadora tipo : tiposComputadoras) { %>
@@ -64,13 +58,13 @@
                                 <% } } %>
                             </select>
                         </div>
+                        <input type="hidden" name="accion" value="actualizarComponentes">
                     </form>
 
                     <!-- Formulario para ensamblar la computadora seleccionada -->
                     <% if (computadoraSeleccionada != null) { %>
                     <h4 class="mt-4">Componentes de la Computadora: <%= computadoraSeleccionada %></h4>
 
-                    <!-- Tabla de componentes -->
                     <form action="EnsamblarComputadora2Servlet" method="post">
                         <input type="hidden" name="computadora" value="<%= computadoraSeleccionada %>">
                         <div class="form-group">
