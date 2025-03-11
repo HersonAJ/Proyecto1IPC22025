@@ -25,7 +25,7 @@
                         <a href="reporteGanancias.jsp" class="list-group-item list-group-item-action">Reporte de Ganancias</a>
                         <a href="reportesAdminMasVentas.jsp" class="list-group-item list-group-item-action">Reporte de Usuario con Más Ventas</a>
                         <a href="reportesAdminVendedorMasGanancia.jsp" class="list-group-item list-group-item-action">Reporte de Usuario con Más Ganancias</a>
-                        <a href="reporteComputadoraMasVendida.jsp" class="list-group-item list-group-item-action">Reporte de Computadora Más Vendida</a>
+                        <a href="ReportesComputadoraMasVendidaServlet" class="list-group-item list-group-item-action">Reporte de Computadora Más Vendida</a>
                         <a href="reporteComputadoraMenosVendida.jsp" class="list-group-item list-group-item-action">Reporte de Computadora Menos Vendida</a>
                     </div>
                 </div>

@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -101,5 +103,58 @@ public class ReportesAdminDB {
 
         return reporteUsuarios;
     }
+    
+public static List<Map<String, Object>> obtenerComputadorasVendidas(String fechaInicio, String fechaFin) {
+    List<Map<String, Object>> listaComputadoras = new ArrayList<>();
+    String sql = "";
+
+    if (fechaInicio != null && !fechaInicio.isEmpty() && fechaFin != null && !fechaFin.isEmpty()) {
+        // Consulta con filtro de fechas
+        sql = "SELECT tc.nombre AS tipo_computadora, " +
+              "       SUM(dv.cantidad) AS total_vendidas " +
+              "FROM TiposComputadoras tc " +
+              "JOIN ComputadorasEnsambladas ce ON tc.id_tipo_computadora = ce.id_tipo_computadora " +
+              "JOIN Detalle_Ventas dv ON ce.id_computadora = dv.id_computadora " +
+              "JOIN Ventas v ON dv.id_venta = v.id_venta " +
+              "WHERE v.fecha_venta BETWEEN ? AND ? " +
+              "GROUP BY tc.nombre " +
+              "ORDER BY total_vendidas DESC";
+    } else {
+        // Consulta global (sin filtro de fechas)
+        sql = "SELECT tc.nombre AS tipo_computadora, " +
+              "       SUM(dv.cantidad) AS total_vendidas " +
+              "FROM TiposComputadoras tc " +
+              "JOIN ComputadorasEnsambladas ce ON tc.id_tipo_computadora = ce.id_tipo_computadora " +
+              "JOIN Detalle_Ventas dv ON ce.id_computadora = dv.id_computadora " +
+              "GROUP BY tc.nombre " +
+              "ORDER BY total_vendidas DESC";
+    }
+
+    try (Connection conn = ConexionDB.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        if (fechaInicio != null && !fechaInicio.isEmpty() && fechaFin != null && !fechaFin.isEmpty()) {
+            // Establecer los parámetros si hay un rango de fechas
+            stmt.setString(1, fechaInicio);
+            stmt.setString(2, fechaFin);
+        }
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                // Crear un mapa para almacenar cada fila
+                Map<String, Object> computadora = new HashMap<>();
+                computadora.put("tipo_computadora", rs.getString("tipo_computadora"));
+                computadora.put("total_vendidas", rs.getInt("total_vendidas"));
+                listaComputadoras.add(computadora);
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al obtener las computadoras más vendidas.");
+        e.printStackTrace();
+    }
+
+    return listaComputadoras;
+}
+
 
 }
