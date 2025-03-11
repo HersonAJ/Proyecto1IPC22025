@@ -5,7 +5,8 @@
 package Controllers;
 
 import Modelos.Componente;
-import backendDB.ModelosDB.ComponenteDB;
+import backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB;
+import backendDB.ModelosDB.ComponentesDB.ComponenteRegistroDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -73,7 +74,7 @@ public class GestionComponentesServlet extends HttpServlet {
 
             if (idComponenteStr == null || idComponenteStr.isEmpty()) {
                 // Intentar registrar un nuevo componente
-                boolean resultado = ComponenteDB.registrarComponente(componente);
+                boolean resultado = ComponenteRegistroDB.registrarComponente(componente);
                 if (resultado) {
                     request.setAttribute("mensaje", "Componente registrado correctamente.");
                     System.out.println("Componente registrado correctamente: " + componente.getNombre());
@@ -86,7 +87,7 @@ public class GestionComponentesServlet extends HttpServlet {
                 int idComponente = Integer.parseInt(idComponenteStr);
                 componente.setIdComponente(idComponente);
 
-                boolean resultado = ComponenteDB.actualizarComponente(componente);
+                boolean resultado = ComponenteRegistroDB.actualizarComponente(componente);
                 if (resultado) {
                     request.setAttribute("mensaje", "Componente actualizado correctamente.");
                     System.out.println("Componente actualizado correctamente: " + componente.getNombre());
@@ -111,7 +112,7 @@ public class GestionComponentesServlet extends HttpServlet {
     private void listarComponentes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Obtener todos los componentes de la base de datos
-            List<Componente> componentes = ComponenteDB.obtenerComponentes();
+            List<Componente> componentes = ComponenteConsultaDB.obtenerComponentes();
             request.setAttribute("componentes", componentes);
 
             // Redirigir al JSP para mostrar los componentes
@@ -126,7 +127,7 @@ public class GestionComponentesServlet extends HttpServlet {
     private void eliminarComponente(HttpServletRequest request, HttpServletResponse response, int idComponente) throws ServletException, IOException {
         try {
             // Eliminar el componente por ID
-            boolean resultado = ComponenteDB.eliminarComponente(idComponente);
+            boolean resultado = ComponenteRegistroDB.eliminarComponente(idComponente);
             if (resultado) {
                 request.setAttribute("mensaje", "Componente eliminado correctamente.");
                 System.out.println("Componente eliminado correctamente con ID: " + idComponente);

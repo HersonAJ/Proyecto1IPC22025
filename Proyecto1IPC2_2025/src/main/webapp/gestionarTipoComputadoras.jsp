@@ -1,4 +1,4 @@
-<%@page import="backendDB.ModelosDB.ComponenteDB"%>
+<%@page import="backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Modelos.TipoComputadora" %>
 <%@ page import="Modelos.Componente" %>
@@ -16,7 +16,7 @@
 
     try {
         tiposComputadoras = TipoComputadoraDB.obtenerTiposComputadoras();
-        componentes = ComponenteDB.obtenerComponentes();
+        componentes = ComponenteConsultaDB.obtenerComponentes();
         detallesComponentes = EnsamblajePiezaDB.obtenerComponentesPorTipoComputadora();
     } catch (Exception e) {
         error = "No se pudieron cargar los datos: " + e.getMessage();

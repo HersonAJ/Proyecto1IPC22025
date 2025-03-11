@@ -6,11 +6,10 @@ package Controllers;
 
 import Modelos.TipoComputadora;
 import Modelos.Usuario;
-import backendDB.ModelosDB.ComponenteDB;
+import backendDB.ModelosDB.ComponentesDB.InventarioDB;
 import backendDB.ModelosDB.ComputadorasEnsambladasDB;
 import backendDB.ModelosDB.TipoComputadoraDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,7 +19,6 @@ import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -41,7 +39,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
             String computadoraSeleccionada = request.getParameter("computadora");
             if (computadoraSeleccionada != null && !computadoraSeleccionada.isEmpty()) {
                 // Obtener componentes y cantidades (requeridas y en inventario)
-                List<String[]> componentes = ComponenteDB.obtenerComponentesConCantidad(computadoraSeleccionada);
+                List<String[]> componentes = InventarioDB.obtenerComponentesConCantidad(computadoraSeleccionada);
                 request.setAttribute("componentes", componentes);
 
                 // Enviar la computadora seleccionada al JSP
@@ -75,7 +73,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
         String nombreUsuario = usuario.getNombreUsuario();
 
         // Validar inventario
-        List<String> componentesInsuficientes = ComponenteDB.validarInventarioComponentes(computadoraSeleccionada);
+        List<String> componentesInsuficientes = InventarioDB.validarInventarioComponentes(computadoraSeleccionada);
         if (!componentesInsuficientes.isEmpty()) {
             request.setAttribute("error", "No hay suficiente inventario para los siguientes componentes: " + componentesInsuficientes);
             doGet(request, response); // Volver a cargar la página
@@ -86,7 +84,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
         boolean ensamblajeRegistrado = ComputadorasEnsambladasDB.registrarEnsamblaje(computadoraSeleccionada, nombreUsuario, fechaFormateada);
         if (ensamblajeRegistrado) {
             // Actualizar inventario
-            boolean inventarioActualizado = ComponenteDB.actualizarInventario(computadoraSeleccionada);
+            boolean inventarioActualizado = InventarioDB.actualizarInventario(computadoraSeleccionada);
             if (inventarioActualizado) {
                 request.setAttribute("mensaje", "La computadora '" + computadoraSeleccionada + "' se ensambló correctamente.");
             } else {

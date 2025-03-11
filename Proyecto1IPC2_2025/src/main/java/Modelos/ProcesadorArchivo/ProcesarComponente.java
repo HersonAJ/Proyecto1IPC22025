@@ -5,7 +5,7 @@
 package Modelos.ProcesadorArchivo;
 
 import Modelos.Componente;
-import backendDB.ModelosDB.ComponenteDB;
+import backendDB.ModelosDB.ComponentesDB.ComponenteRegistroDB;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class ProcesarComponente {
             componente.setCantidadDisponible(1); // Cada instrucción representa una unidad
 
             // Llamar al DB para registrar o actualizar el componente (incluyendo lógica para actualizar el precio)
-            if (ComponenteDB.registrarComponente(componente)) {
+            if (ComponenteRegistroDB.registrarComponente(componente)) {
                 logProcesamiento.add("Componente procesado correctamente: " + nombre + " (Precio actualizado: " + costo + ")");
             } else {
                 logProcesamiento.add("Error al procesar el componente: " + nombre);

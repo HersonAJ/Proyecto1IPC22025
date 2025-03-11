@@ -4,7 +4,7 @@
  */
 package Modelos.ProcesadorArchivo;
 
-import backendDB.ModelosDB.ComponenteDB;
+import backendDB.ModelosDB.ComponentesDB.InventarioDB;
 import backendDB.ModelosDB.ComputadorasEnsambladasDB;
 import backendDB.ModelosDB.TipoComputadoraDB;
 import backendDB.ModelosDB.UsuarioDB;
@@ -36,7 +36,7 @@ public class ProcesarEnsamblajeComputadoras {
                 logProcesamiento.add("Error: El usuario '" + nombreUsuario + "' no existe.");
                 return;
             }
-            List<String> componentesInsuficientes = ComponenteDB.validarInventarioComponentes(nombreComputadora);
+            List<String> componentesInsuficientes = InventarioDB.validarInventarioComponentes(nombreComputadora);
             if (!componentesInsuficientes.isEmpty()) {
                 logProcesamiento.add("Error: Insuficiencia de los siguientes componentes: " + componentesInsuficientes);
                 return;
@@ -44,7 +44,7 @@ public class ProcesarEnsamblajeComputadoras {
 
             // Registrar ensamblaje y actualizar inventario
             if (ComputadorasEnsambladasDB.registrarEnsamblaje(nombreComputadora, nombreUsuario, fecha)) {
-                if (ComponenteDB.actualizarInventario(nombreComputadora)) {
+                if (InventarioDB.actualizarInventario(nombreComputadora)) {
                     logProcesamiento.add("Éxito: Ensamblaje de '" + nombreComputadora + "' registrado correctamente.");
                 } else {
                     logProcesamiento.add("Error: No se pudo actualizar el inventario para '" + nombreComputadora + "'.");

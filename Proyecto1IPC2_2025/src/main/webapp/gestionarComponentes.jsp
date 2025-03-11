@@ -1,6 +1,6 @@
+<%@page import="backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Modelos.Componente" %>
-<%@ page import="backendDB.ModelosDB.ComponenteDB" %>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
 
@@ -9,7 +9,7 @@
     String mensaje = (String) request.getAttribute("mensaje");
     String error = (String) request.getAttribute("error");
     try {
-        componentes = ComponenteDB.obtenerComponentes();
+        componentes = ComponenteConsultaDB.obtenerComponentes();
     } catch (Exception e) {
         error = "No se pudieron cargar los componentes: " + e.getMessage();
     }

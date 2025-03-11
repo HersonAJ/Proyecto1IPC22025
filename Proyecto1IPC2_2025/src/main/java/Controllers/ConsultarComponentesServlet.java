@@ -5,9 +5,8 @@
 package Controllers;
 
 import Modelos.Componente;
-import backendDB.ModelosDB.ComponenteDB;
+import backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -32,9 +31,9 @@ public class ConsultarComponentesServlet extends HttpServlet {
             // Llamar al método del modelo para obtener los componentes según el criterio
             List<Componente> componentes;
             if (criterioBusqueda == null || criterioBusqueda.trim().isEmpty()) {
-                componentes = ComponenteDB.obtenerTodosLosComponentes(); // Obtener todo
+                componentes = ComponenteConsultaDB.obtenerTodosLosComponentes(); // Obtener todo
             } else {
-                componentes = ComponenteDB.buscarComponentesPorNombre(criterioBusqueda.trim()); // Búsqueda parcial
+                componentes = ComponenteConsultaDB.buscarComponentesPorNombre(criterioBusqueda.trim()); // Búsqueda parcial
             }
 
             // Pasar los componentes como atributo a la vista
