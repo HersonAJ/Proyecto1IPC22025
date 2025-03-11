@@ -5,11 +5,9 @@
 package Controllers;
 
 import Modelos.Cliente;
-import Modelos.Computadora;
 import Modelos.ComputadoraEnsamblada;
 import Modelos.DetalleVenta;
 import backendDB.ModelosDB.ClienteDB;
-import backendDB.ModelosDB.ComputadoraDB;
 import backendDB.ModelosDB.Vendedor.VendedorComputadoraDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;

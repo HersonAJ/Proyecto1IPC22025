@@ -1,5 +1,5 @@
-<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
-<%@page import="Modelos.Computadora"%>
+<%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
+<%@page import="Modelos.ComputadoraEnsamblada"%>
 <%@page import="Modelos.Venta"%>
 <%@page import="backendDB.ModelosDB.VentaDB"%>
 <%@ page import="java.util.List" %>
@@ -72,7 +72,6 @@
                                 <td><%= devolucion.getIdVenta() %></td>
                                 <td>
                                     <%
-                                        // Obtener la fecha de la venta original
                                         Venta venta = VentaDB.obtenerVenta(devolucion.getIdVenta());
                                         if (venta != null) {
                                             out.print(venta.getFechaVenta());
@@ -117,21 +116,17 @@
                                                 List<DetalleDevolucion> detallesDevolucion = (List<DetalleDevolucion>) request.getAttribute("detallesDevolucion_" + devolucion.getIdDevolucion());
                                                 if (detallesDevolucion != null) {
                                                     for (DetalleDevolucion detalle : detallesDevolucion) {
+                                                        ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(detalle.getIdComputadora());
+                                                        if (computadora != null) {
                                             %>
                                             <tr>
                                                 <td><%= detalle.getIdComputadora() %></td>
-                                                <td>
-                                                    <%
-                                                        Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
-                                                        if (computadora != null) {
-                                                            out.print(computadora.getNombre());
-                                                        }
-                                                    %>
-                                                </td>
+                                                <td><%= computadora.getTipoComputadora().getNombre() %></td>
                                                 <td><%= detalle.getCantidad() %></td>
                                                 <td><%= detalle.getSubtotal() %></td>
                                             </tr>
-                                            <% 
+                                            <%
+                                                        }
                                                     }
                                                 }
                                             %>

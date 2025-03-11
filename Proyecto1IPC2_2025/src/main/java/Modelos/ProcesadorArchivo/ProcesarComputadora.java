@@ -4,9 +4,7 @@
  */
 package Modelos.ProcesadorArchivo;
 
-import Modelos.Computadora;
 import Modelos.TipoComputadora;
-import backendDB.ModelosDB.ComputadoraDB;
 import backendDB.ModelosDB.TipoComputadoraDB;
 import java.util.List;
 

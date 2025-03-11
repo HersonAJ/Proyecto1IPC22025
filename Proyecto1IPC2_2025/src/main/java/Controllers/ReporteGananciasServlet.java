@@ -4,13 +4,13 @@
  */
 package Controllers;
 
-import Modelos.Computadora;
+import Modelos.ComputadoraEnsamblada;
 import Modelos.DetalleVenta;
 import Modelos.Devolucion;
 import Modelos.Venta;
-import backendDB.ModelosDB.ComputadoraDB;
 import backendDB.ModelosDB.DetalleVentaDB;
 import backendDB.ModelosDB.DevolucionDB;
+import backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente;
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -29,8 +29,6 @@ import java.util.List;
 @WebServlet(name = "ReporteGananciasServlet", urlPatterns = {"/ReporteGananciasServlet"})
 public class ReporteGananciasServlet extends HttpServlet {
 
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtener los parámetros del formulario
@@ -47,13 +45,18 @@ public class ReporteGananciasServlet extends HttpServlet {
             List<Venta> ventas = VentaDB.obtenerVentas(fechaInicio, fechaFin);
 
             // Calcular las ganancias de las ventas
-            List<Computadora> computadorasVendidas = new ArrayList<>();
+            List<ComputadoraEnsamblada> computadorasVendidas = new ArrayList<>();
             for (Venta venta : ventas) {
                 List<DetalleVenta> detallesVenta = DetalleVentaDB.obtenerDetallesVentaReportes(venta.getIdVenta());
                 for (DetalleVenta detalle : detallesVenta) {
-                    Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
-                    double ganancia = (computadora.getPrecioVenta() - computadora.getCostoTotal()) * detalle.getCantidad();
+                    // Utilizar el método actualizado para obtener la computadora ensamblada
+                    ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(detalle.getIdComputadora());
+                    
+                    // Calcular la ganancia utilizando precio de venta y costo total
+                    double ganancia = (computadora.getTipoComputadora().getPrecioVenta() - computadora.getCostoTotal()) * detalle.getCantidad();
                     totalGanancia += ganancia;
+                    
+                    // Agregar la computadora ensamblada a la lista de computadoras vendidas
                     computadorasVendidas.add(computadora);
                 }
             }

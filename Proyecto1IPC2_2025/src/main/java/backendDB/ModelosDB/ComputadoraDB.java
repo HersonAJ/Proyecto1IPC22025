@@ -4,8 +4,6 @@
  */
 package backendDB.ModelosDB;
 
-import Modelos.Componente;
-import Modelos.Computadora;
 import backendDB.ConexionDB;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,47 +20,7 @@ import java.util.Map;
  */
 public class ComputadoraDB {
 
-    // Método para registrar una computadora
-    //lo usa el procesador de archivo
-    public static boolean registrarComputadora(Computadora computadora) {
-        String sql = "INSERT INTO Computadoras (nombre, precio_venta, costo_total) VALUES (?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, computadora.getNombre());
-            stmt.setDouble(2, computadora.getPrecioVenta());
-            stmt.setDouble(3, computadora.getCostoTotal());
-            int filasInsertadas = stmt.executeUpdate();
-            return filasInsertadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Método para obtener una computadora específica por su ID
-    //lo usa ReporteGananciasServlet   
-    //metodo obsoleto porque ya no existe la tabla computadora
-    public static Computadora obtenerComputadora(int idComputadora) throws SQLException {
-        Computadora computadora = null;
-        String query = "SELECT * FROM Computadoras WHERE id_computadora = ?";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, idComputadora);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    computadora = new Computadora();
-                    computadora.setIdComputadora(rs.getInt("id_computadora"));
-                    computadora.setNombre(rs.getString("nombre"));
-                    computadora.setPrecioVenta(rs.getDouble("precio_venta"));
-                    computadora.setCostoTotal(rs.getDouble("costo_total"));
-                }
-            }
-        }
-        return computadora;
-    }
-    
-    
-    //metodo usado por el vendedor para obtener las computadoras disponibles 
+        //metodo usado por el vendedor para obtener las computadoras disponibles 
     public static List<Map<String, Object>> obtenerComputadorasConDetalles() throws SQLException {
         List<Map<String, Object>> computadorasConDetalles = new ArrayList<>();
         String query

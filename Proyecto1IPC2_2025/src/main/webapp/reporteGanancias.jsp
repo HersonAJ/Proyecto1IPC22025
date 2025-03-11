@@ -1,15 +1,15 @@
+<%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
 <%@page import="backendDB.ModelosDB.DetalleVentaDB"%>
 <%@page import="backendDB.ModelosDB.UsuarioDB"%>
 <%@page import="backendDB.ModelosDB.ClienteDB"%>
-<%@page import="backendDB.ModelosDB.ComputadoraDB"%>
 <%@page import="Modelos.DetalleVenta"%>
+<%@page import="Modelos.ComputadoraEnsamblada"%>
 <%@page import="backendDB.ModelosDB.VentaDB"%>
 <%@page import="Modelos.Cliente"%>
 <%@page import="java.util.ArrayList"%>
-<%@ page import="java.util.List" %>
-<%@ page import="Modelos.Venta" %>
-<%@ page import="Modelos.Devolucion" %>
-<%@ page import="Modelos.Computadora" %>
+<%@page import="java.util.List"%>
+<%@page import="Modelos.Venta"%>
+<%@page import="Modelos.Devolucion"%>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
 
@@ -47,7 +47,7 @@
                         Double gananciaNeta = (Double) request.getAttribute("gananciaNeta");
                         List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
                         List<Devolucion> devoluciones = (List<Devolucion>) request.getAttribute("devoluciones");
-                        List<Computadora> computadorasVendidas = (List<Computadora>) request.getAttribute("computadorasVendidas");
+                        List<ComputadoraEnsamblada> computadorasVendidas = (List<ComputadoraEnsamblada>) request.getAttribute("computadorasVendidas");
 
                         // Manejar posibles valores null
                         totalGanancia = totalGanancia != null ? totalGanancia : 0.0;
@@ -97,10 +97,10 @@
                                     <%
                                         List<DetalleVenta> detallesVenta = DetalleVentaDB.obtenerDetallesVenta(venta.getIdVenta());
                                         for (DetalleVenta detalle : detallesVenta) {
-                                            Computadora computadora = ComputadoraDB.obtenerComputadora(detalle.getIdComputadora());
+                                            ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(detalle.getIdComputadora());
                                             if (computadora != null) {
                                     %>
-                                    <li><%= computadora.getNombre() %> (<%= detalle.getCantidad() %> unidades)</li>
+                                    <li><%= computadora.getTipoComputadora().getNombre() %> (<%= detalle.getCantidad() %> unidades)</li>
                                     <%
                                             }
                                         }
@@ -147,9 +147,9 @@
                                 </td>
                                 <td>
                                     <%
-                                        Computadora computadora = ComputadoraDB.obtenerComputadora(devolucion.getIdComputadora());
+                                        ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(devolucion.getIdComputadora());
                                         if (computadora != null) {
-                                            out.print(computadora.getNombre());
+                                            out.print(computadora.getTipoComputadora().getNombre());
                                         }
                                     %>
                                 </td>
