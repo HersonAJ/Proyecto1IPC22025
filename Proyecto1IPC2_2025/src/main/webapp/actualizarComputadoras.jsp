@@ -29,7 +29,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Computadoras</title>
-    <%@ include file="/resources/resources.jsp" %> <!-- Recursos como Bootstrap -->
+    <%@ include file="/resources/resources.jsp" %>
+    <%@ include file="/resources/header.jsp" %>
 </head>
 <body>
     <div class="container-fluid">

@@ -33,7 +33,6 @@ public class RegistrarVentaServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("Se ejecutó el RegistrarVentaServlet");
 
-        // Obtener la lista de detalles de la venta desde la sesión
         List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getSession().getAttribute("detalleVenta");
         if (detalleVenta == null || detalleVenta.isEmpty()) {
             request.setAttribute("error", "No hay artículos en el carrito para procesar la venta.");
@@ -41,18 +40,15 @@ public class RegistrarVentaServlet extends HttpServlet {
             return;
         }
 
-        // Obtener el cliente y el usuario desde la sesión
         Cliente cliente = (Cliente) request.getSession().getAttribute("cliente");
         int idUsuario = (int) request.getSession().getAttribute("idUsuario");
 
-        // Validar que el cliente esté seleccionado
         if (cliente == null) {
             request.setAttribute("error", "Debe seleccionar un cliente antes de confirmar la venta.");
             request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
             return;
         }
 
-        // Obtener la fecha ingresada por el usuario
         String fechaVentaStr = request.getParameter("fechaVenta");
         Date fechaVenta;
         try {
@@ -65,31 +61,32 @@ public class RegistrarVentaServlet extends HttpServlet {
             return;
         }
 
-        // Calcular el total de la venta
         double totalVenta = detalleVenta.stream()
                 .mapToDouble(DetalleVenta::getSubtotal)
                 .sum();
         System.out.println("Total de la venta: " + totalVenta);
 
-        // Crear el objeto venta
         Venta venta = new Venta();
         venta.setIdCliente(cliente.getIdCliente());
         venta.setIdUsuario(idUsuario);
-        venta.setFechaVenta(fechaVenta); // Usar la fecha ingresada
+        venta.setFechaVenta(fechaVenta);
         venta.setTotalVenta(totalVenta);
 
-        // Registrar la venta en la base de datos
-        boolean ventaRegistrada = VendedorComputadoraDB.registrarVenta(venta); // Cambiado a VendedorComputadoraDB
+        // Recuperar el ID de la computadora ensamblada desde la sesión
+        int idComputadoraEnsamblada = (int) request.getSession().getAttribute("idComputadoraEnsamblada");
+        venta.setIdComputadoraEnsamblada(idComputadoraEnsamblada); // Asignar al objeto Venta
+        System.out.println("ID Computadora Ensamblada en la venta: " + idComputadoraEnsamblada);
+
+        boolean ventaRegistrada = VendedorComputadoraDB.registrarVenta(venta, detalleVenta);
+
         if (ventaRegistrada) {
             System.out.println("Venta registrada con ID: " + venta.getIdVenta() + " y número de factura: " + venta.getNumeroFactura());
 
-            // Registrar los detalles de la venta
             for (DetalleVenta detalle : detalleVenta) {
                 detalle.setIdVenta(venta.getIdVenta());
-                VendedorComputadoraDB.registrarDetalleVenta(detalle); // Cambiado a VendedorComputadoraDB
+                VendedorComputadoraDB.registrarDetalleVenta(detalle);
             }
 
-            // Redirigir al JSP para mostrar la factura
             request.setAttribute("venta", venta);
             request.setAttribute("cliente", cliente);
             request.setAttribute("detalleVenta", detalleVenta);
@@ -100,3 +97,4 @@ public class RegistrarVentaServlet extends HttpServlet {
         }
     }
 }
+

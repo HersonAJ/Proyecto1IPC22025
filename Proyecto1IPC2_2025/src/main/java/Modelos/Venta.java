@@ -18,6 +18,7 @@ public class Venta {
     private Date fechaVenta;
     private double totalVenta;
     private int numeroFactura;
+    private int idComputadoraEnsamblada;
 
     
     public int getNumeroFactura() {
@@ -48,6 +49,10 @@ public class Venta {
         return totalVenta;
     }
 
+    public int getIdComputadoraEnsamblada() {
+        return idComputadoraEnsamblada;
+    }
+    
     public void setIdVenta(int idVenta) {
         this.idVenta = idVenta;
     }
@@ -66,6 +71,10 @@ public class Venta {
 
     public void setTotalVenta(double totalVenta) {
         this.totalVenta = totalVenta;
+    }
+
+    public void setIdComputadoraEnsamblada(int idComputadoraEnsamblada) {
+        this.idComputadoraEnsamblada = idComputadoraEnsamblada;
     }
     
 }

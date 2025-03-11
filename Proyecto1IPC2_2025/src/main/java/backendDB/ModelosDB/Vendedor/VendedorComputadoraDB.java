@@ -115,59 +115,96 @@ public class VendedorComputadoraDB {
     return computadora;
 }
 
-    //metodo para registrar la venta
-        public static boolean registrarVenta(Venta venta) {
-        String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta, numero_factura) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+// Método para registrar una venta y actualizar el estado de todas las computadoras ensambladas asociadas
+public static boolean registrarVenta(Venta venta, List<DetalleVenta> detalleVenta) {
+    String sql = "INSERT INTO Ventas (id_cliente, id_usuario, fecha_venta, total_venta, numero_factura) VALUES (?, ?, ?, ?, ?)";
+    String actualizarEstadoSQL = "UPDATE ComputadorasEnsambladas SET estado = 'Vendida' WHERE id_computadora = ?";
 
-            // Configurar los valores para la consulta de inserción
-            stmt.setInt(1, venta.getIdCliente());
-            stmt.setInt(2, venta.getIdUsuario());
-            stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
-            stmt.setDouble(4, venta.getTotalVenta());
-            stmt.setInt(5, venta.getNumeroFactura()); // Inicialmente será 0
+    try (Connection conn = ConexionDB.getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            // Ejecutar la inserción
-            int filasInsertadas = stmt.executeUpdate();
-            if (filasInsertadas > 0) {
-                // Obtener el ID generado automáticamente
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int idVentaGenerado = generatedKeys.getInt(1);
-                    venta.setIdVenta(idVentaGenerado);
-                    venta.setNumeroFactura(idVentaGenerado);
-                }
+        System.out.println("Conectado a la base de datos para registrar una venta.");
 
-                // Actualizar el campo numero_factura en la base de datos
-                String updateQuery = "UPDATE Ventas SET numero_factura = ? WHERE id_venta = ?";
-                try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
-                    updateStmt.setInt(1, venta.getNumeroFactura());
-                    updateStmt.setInt(2, venta.getIdVenta());
-                    updateStmt.executeUpdate();
-                }
-                return true;
+        // Configurar los valores para la consulta de inserción
+        System.out.println("Datos de la venta: idCliente=" + venta.getIdCliente() + ", idUsuario=" + venta.getIdUsuario() +
+                           ", fechaVenta=" + venta.getFechaVenta() + ", totalVenta=" + venta.getTotalVenta() + 
+                           ", numeroFactura=" + venta.getNumeroFactura());
+        stmt.setInt(1, venta.getIdCliente());
+        stmt.setInt(2, venta.getIdUsuario());
+        stmt.setDate(3, new java.sql.Date(venta.getFechaVenta().getTime()));
+        stmt.setDouble(4, venta.getTotalVenta());
+        stmt.setInt(5, venta.getNumeroFactura()); // Inicialmente será 0
+
+        // Ejecutar la inserción de la venta
+        int filasInsertadas = stmt.executeUpdate();
+        if (filasInsertadas > 0) {
+            // Obtener el ID generado automáticamente para la venta
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int idVentaGenerado = generatedKeys.getInt(1);
+                venta.setIdVenta(idVentaGenerado);
+                venta.setNumeroFactura(idVentaGenerado);
+                System.out.println("Venta registrada con ID: " + idVentaGenerado);
             }
-            return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-        
-            public static boolean registrarDetalleVenta(DetalleVenta detalle) {
-        String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
-        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, detalle.getIdVenta());
-            stmt.setInt(2, detalle.getIdComputadora());
-            stmt.setInt(3, detalle.getCantidad());
-            stmt.setDouble(4, detalle.getSubtotal());
 
-            int filasInsertadas = stmt.executeUpdate();
-            return filasInsertadas > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            // Actualizar el campo numero_factura en la base de datos
+            String updateQuery = "UPDATE Ventas SET numero_factura = ? WHERE id_venta = ?";
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                updateStmt.setInt(1, venta.getNumeroFactura());
+                updateStmt.setInt(2, venta.getIdVenta());
+                int updateRows = updateStmt.executeUpdate();
+                System.out.println("Actualización del número de factura completada. Filas afectadas: " + updateRows);
+            }
+
+            // Iterar sobre todos los detalles de venta para actualizar el estado de las computadoras ensambladas
+            try (PreparedStatement actualizarEstadoStmt = conn.prepareStatement(actualizarEstadoSQL)) {
+                for (DetalleVenta detalle : detalleVenta) {
+                    System.out.println("Intentando actualizar el estado de la computadora ensamblada con ID: " + detalle.getIdComputadora());
+                    actualizarEstadoStmt.setInt(1, detalle.getIdComputadora());
+                    int filasActualizadas = actualizarEstadoStmt.executeUpdate();
+                    if (filasActualizadas == 0) {
+                        System.out.println("No se pudo actualizar el estado de la computadora ensamblada con ID: " + detalle.getIdComputadora());
+                        return false; // Falló al actualizar una computadora
+                    } else {
+                        System.out.println("Estado de la computadora ensamblada actualizado correctamente para ID: " + detalle.getIdComputadora());
+                    }
+                }
+            }
+
+            return true; // Venta registrada y estados actualizados
         }
+
+        System.out.println("No se pudo registrar la venta.");
+        return false; // Falló al registrar la venta
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
+
+
+        
+public static boolean registrarDetalleVenta(DetalleVenta detalle) {
+    String sql = "INSERT INTO Detalle_Ventas (id_venta, id_computadora, cantidad, subtotal) VALUES (?, ?, ?, ?)";
+    try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        System.out.println("Conectado a la base de datos para registrar el detalle de venta.");
+        System.out.println("Datos del detalle: idVenta=" + detalle.getIdVenta() + ", idComputadora=" + detalle.getIdComputadora() +
+                           ", cantidad=" + detalle.getCantidad() + ", subtotal=" + detalle.getSubtotal());
+
+        stmt.setInt(1, detalle.getIdVenta());
+        stmt.setInt(2, detalle.getIdComputadora());
+        stmt.setInt(3, detalle.getCantidad());
+        stmt.setDouble(4, detalle.getSubtotal());
+
+        int filasInsertadas = stmt.executeUpdate();
+        System.out.println("Detalle registrado. Filas insertadas: " + filasInsertadas);
+        return filasInsertadas > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
 }

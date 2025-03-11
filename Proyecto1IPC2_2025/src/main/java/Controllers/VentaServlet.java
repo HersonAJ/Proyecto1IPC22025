@@ -30,11 +30,9 @@ public class VentaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtener la acción enviada desde el JSP
         String action = request.getParameter("action");
         System.out.println("la acción que se ejecutó fue: " + action);
 
-        // Obtener la lista de detalles de la venta desde la sesión
         List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getSession().getAttribute("detalleVenta");
         if (detalleVenta == null) {
             detalleVenta = new ArrayList<>();
@@ -43,27 +41,18 @@ public class VentaServlet extends HttpServlet {
         System.out.println("lista detalleVenta al iniciar: " + detalleVenta.size());
 
         if ("cargarComputadoras".equals(action)) {
-
             try {
                 System.out.println("Se está ejecutando la acción de cargar computadoras");
-
-                // Acción para cargar la información inicial
                 String nit = request.getParameter("nit");
                 System.out.println("El NIT que se ingresó fue: " + nit);
-                Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
-                request.getSession().setAttribute("cliente", cliente); // Guardar cliente en sesión
-                request.setAttribute("cliente", cliente); // Pasar cliente al JSP
 
-                // Cargar computadoras desde la base de datos
-                List<ComputadoraEnsamblada> computadoras = null;
-                try {
-                    computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas(); // Método actualizado
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
+                request.getSession().setAttribute("cliente", cliente);
+                request.setAttribute("cliente", cliente);
+
+                List<ComputadoraEnsamblada> computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas();
                 request.setAttribute("computadoras", computadoras);
 
-                // Redirigir al JSP de selección
                 request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
 
             } catch (SQLException ex) {
@@ -81,15 +70,13 @@ public class VentaServlet extends HttpServlet {
             } else {
                 int idComputadora = Integer.parseInt(idComputadoraStr);
                 try {
-                    // Obtener los datos de la computadora desde la base de datos
-                    ComputadoraEnsamblada computadora = VendedorComputadoraDB.obtenerComputadora(idComputadora); // Método actualizado
+                    ComputadoraEnsamblada computadora = VendedorComputadoraDB.obtenerComputadora(idComputadora);
                     if (computadora != null) {
-                        // Crear una nueva fila para cada computadora agregada
                         DetalleVenta nuevoDetalle = new DetalleVenta();
-                        nuevoDetalle.setIdDetalleVenta(detalleVenta.size() + 1); // Asignar un ID único basado en el tamaño de la lista
+                        nuevoDetalle.setIdDetalleVenta(detalleVenta.size() + 1);
                         nuevoDetalle.setIdComputadora(idComputadora);
-                        nuevoDetalle.setCantidad(1); // Siempre inicia con 1
-                        nuevoDetalle.setSubtotal(computadora.getTipoComputadora().getPrecioVenta()); // Precio desde TipoComputadora
+                        nuevoDetalle.setCantidad(1);
+                        nuevoDetalle.setSubtotal(computadora.getTipoComputadora().getPrecioVenta());
                         detalleVenta.add(nuevoDetalle);
                         System.out.println("Detalle agregado con ID único: " + nuevoDetalle.getIdDetalleVenta());
                     }
@@ -99,24 +86,30 @@ public class VentaServlet extends HttpServlet {
                 }
             }
 
-            // Continuar con la lógica para recargar datos
             List<ComputadoraEnsamblada> computadoras = null;
             try {
-                computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas(); // Método actualizado
+                computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            request.setAttribute("cliente", request.getSession().getAttribute("cliente")); // Recuperar cliente
-            request.setAttribute("computadoras", computadoras); // Lista de computadoras
-            request.setAttribute("detalleVenta", detalleVenta); // Lista de detalles actualizada
-            request.getSession().setAttribute("detalleVenta", detalleVenta); // Actualizar en sesión
+            request.setAttribute("cliente", request.getSession().getAttribute("cliente"));
+            request.setAttribute("computadoras", computadoras);
+            request.setAttribute("detalleVenta", detalleVenta);
+            request.getSession().setAttribute("detalleVenta", detalleVenta);
             request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
         } else if ("confirmarVenta".equals(action)) {
             System.out.println("Se está ejecutando la acción de confirmarVenta");
 
-            // Redirigir al RegistrarVentaServlet
+            // Pasar el ID de la primera computadora de la lista de detalles a la sesión para usarlo en el RegistrarVentaServlet
+            if (!detalleVenta.isEmpty()) {
+                int idComputadoraEnsamblada = detalleVenta.get(0).getIdComputadora();
+                request.getSession().setAttribute("idComputadoraEnsamblada", idComputadoraEnsamblada);
+                System.out.println("ID Computadora Ensamblada seleccionado: " + idComputadoraEnsamblada);
+            }
+
             request.getRequestDispatcher("RegistrarVentaServlet").forward(request, response);
         }
     }
 }
+

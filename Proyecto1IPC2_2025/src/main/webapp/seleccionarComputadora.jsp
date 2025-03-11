@@ -10,15 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venta - Selección de Computadoras</title>
     <jsp:include page="/resources/resources.jsp" />
-    <script>
-        // Función para confirmar la venta antes de proceder
-        function confirmarVenta(event) {
-            const confirmar = confirm("¿Estás seguro de que deseas proceder con la venta?");
-            if (!confirmar) {
-                event.preventDefault(); // Evitar el envío del formulario si no se confirma
-            }
-        }
-    </script>
 </head>
 <body>
     <jsp:include page="/resources/header.jsp" />
@@ -60,14 +51,32 @@
                                 <% 
                                     List<ComputadoraEnsamblada> listaComputadoras = 
                                         (List<ComputadoraEnsamblada>) request.getAttribute("computadoras");
+                                    List<DetalleVenta> detalleVenta = 
+                                        (List<DetalleVenta>) request.getAttribute("detalleVenta");
+
                                     if (listaComputadoras != null) {
-                                        for (ComputadoraEnsamblada computadora : listaComputadoras) { 
+                                        for (ComputadoraEnsamblada computadora : listaComputadoras) {
+                                            boolean yaEnVenta = false;
+
+                                            // Verificar si la computadora ya está en detalleVenta
+                                            if (detalleVenta != null) {
+                                                for (DetalleVenta detalle : detalleVenta) {
+                                                    if (computadora.getIdComputadora() == detalle.getIdComputadora()) {
+                                                        yaEnVenta = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            // Mostrar solo las computadoras que no estén ya en venta
+                                            if (!yaEnVenta) {
                                 %>
                                     <option value="<%= computadora.getIdComputadora() %>">
                                         <%= computadora.getTipoComputadora().getNombre() %> - Q<%= computadora.getTipoComputadora().getPrecioVenta() %>
                                     </option>
                                 <% 
-                                        } 
+                                            }
+                                        }
                                     } 
                                 %>
                             </select>
@@ -77,7 +86,6 @@
 
                     <!-- Lista de computadoras en la venta -->
                     <% 
-                        List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getAttribute("detalleVenta");
                         double totalVenta = 0; // Variable para calcular el total
                         if (detalleVenta != null && !detalleVenta.isEmpty()) { 
                     %>
