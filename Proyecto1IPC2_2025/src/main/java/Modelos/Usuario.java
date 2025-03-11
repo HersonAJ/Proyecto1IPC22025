@@ -16,6 +16,7 @@ public class Usuario {
     private int idRol;
     private String rolNombre;
     private String estado;
+    private int totalVentas;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -41,6 +42,16 @@ public class Usuario {
         return estado;
     }
 
+    public int getIdRol() {
+        return idRol;
+    }
+
+    public int getTotalVentas() {
+        return totalVentas;
+    }
+    
+    
+
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
@@ -64,4 +75,13 @@ public class Usuario {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
+    }
+
+    public void setTotalVentas(int totalVentas) {
+        this.totalVentas = totalVentas;
+    }
+    
 }
