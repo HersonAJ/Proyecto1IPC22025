@@ -63,7 +63,7 @@
                     <div class="factura-header">
                         <h2>Factura</h2>
                     </div>
-                    <form action="ConsultarFacturaServlet" method="post" class="mt-4">
+                    <form action="${pageContext.request.contextPath}/ConsultarFacturaServlet" method="post" class="mt-4">
                         <div class="form-group">
                             <label for="numeroFactura">Número de Factura</label>
                             <input type="number" class="form-control" id="numeroFactura" name="numeroFactura" placeholder="Ingrese el número de factura" required>

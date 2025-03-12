@@ -131,7 +131,7 @@
                     <!-- Botones para imprimir y aceptar -->
                     <div class="mt-5 text-center">
                         <button onclick="window.print()" class="btn btn-primary btn-imprimir">Imprimir / Descargar PDF</button>
-                        <form action="buscarCliente.jsp" method="post" class="d-inline" onsubmit="limpiarSesion(event);">
+                        <form action="${pageContext.request.contextPath}/Vendedor/buscarCliente.jsp" method="post" class="d-inline" onsubmit="limpiarSesion(event);">
                             <button type="submit" class="btn btn-success">Aceptar</button>
                         </form>
                     </div>

@@ -2,14 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import Modelos.Cliente;
 import Modelos.DetalleVenta;
 import Modelos.Venta;
-import backendDB.ModelosDB.DetalleVentaDB;
 import backendDB.ModelosDB.Vendedor.VendedorComputadoraDB;
-import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -36,7 +34,7 @@ public class RegistrarVentaServlet extends HttpServlet {
         List<DetalleVenta> detalleVenta = (List<DetalleVenta>) request.getSession().getAttribute("detalleVenta");
         if (detalleVenta == null || detalleVenta.isEmpty()) {
             request.setAttribute("error", "No hay artículos en el carrito para procesar la venta.");
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
             return;
         }
 
@@ -45,7 +43,7 @@ public class RegistrarVentaServlet extends HttpServlet {
 
         if (cliente == null) {
             request.setAttribute("error", "Debe seleccionar un cliente antes de confirmar la venta.");
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
             return;
         }
 
@@ -57,7 +55,7 @@ public class RegistrarVentaServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
             request.setAttribute("error", "Formato de fecha inválido.");
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
             return;
         }
 
@@ -90,10 +88,10 @@ public class RegistrarVentaServlet extends HttpServlet {
             request.setAttribute("venta", venta);
             request.setAttribute("cliente", cliente);
             request.setAttribute("detalleVenta", detalleVenta);
-            request.getRequestDispatcher("mostrarFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarFactura.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "No se pudo registrar la venta.");
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
         }
     }
 }

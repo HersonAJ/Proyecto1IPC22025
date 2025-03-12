@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import Modelos.Cliente;
 import Modelos.DetalleVenta;
 import Modelos.Venta;
 import backendDB.ModelosDB.ComprasClienteDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,7 +29,7 @@ public class ConsultarFacturaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Solo redirige al JSP vacío (sin procesar datos)
-        request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+        request.getRequestDispatcher("${pageContext.request.contextPath}/Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
     }
 
     @Override
@@ -42,7 +41,7 @@ public class ConsultarFacturaServlet extends HttpServlet {
         // Validar que el número de factura sea válido
         if (numeroFacturaStr == null || numeroFacturaStr.trim().isEmpty()) {
             request.setAttribute("error", "Debe ingresar un número de factura.");
-            request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
             return;
         }
 
@@ -55,7 +54,7 @@ public class ConsultarFacturaServlet extends HttpServlet {
             // Manejar caso en el que no se encuentra la factura
             if (facturaCompleta == null) {
                 request.setAttribute("error", "No se encontró una factura con el número proporcionado.");
-                request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+                request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
                 return;
             }
 
@@ -81,22 +80,22 @@ public class ConsultarFacturaServlet extends HttpServlet {
             request.setAttribute("vendedor", facturaCompleta.get("vendedor_nombre"));
 
             // Redirigir al JSP para mostrar la factura
-            request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
             // Manejar caso donde el número de factura no es un número válido
             request.setAttribute("error", "El número de factura ingresado no es válido.");
-            request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
         } catch (SQLException e) {
             // Manejar errores de la base de datos
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al consultar la factura: " + e.getMessage());
-            request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
         } catch (Exception e) {
             // Manejar cualquier otra excepción
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error inesperado: " + e.getMessage());
-            request.getRequestDispatcher("mostrarNumeroFactura.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/mostrarNumeroFactura.jsp").forward(request, response);
         }
     }
 }

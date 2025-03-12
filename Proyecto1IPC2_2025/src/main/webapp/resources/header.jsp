@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="LogoutServlet" class="nav-link text-white">
+                        <a href="${pageContext.request.contextPath}/LogoutServlet" class="nav-link text-white">
                             <i class="bi bi-box-arrow-right d-block mx-auto mb-1" width="24" height="24"></i>
                             Logout
                         </a>

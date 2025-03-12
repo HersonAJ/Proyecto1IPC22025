@@ -41,7 +41,7 @@
                     <hr>
 
                     <!-- Formulario de búsqueda -->
-                    <form action="ComprasClientServlet" method="post" class="mt-4">
+                    <form action="${pageContext.request.contextPath}/ComprasClientServlet" method="post" class="mt-4">
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="nit">NIT del Cliente</label>

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import Modelos.Cliente;
 import Modelos.ComputadoraEnsamblada;
@@ -96,6 +96,6 @@ public class EliminarDetalleServlet extends HttpServlet {
         request.setAttribute("detalleVenta", detalleVenta); // Pasar detalles al JSP
 
         // Reenviar al JSP
-        request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+        request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
     }
 }

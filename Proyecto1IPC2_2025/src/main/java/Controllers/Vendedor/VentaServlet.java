@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import Modelos.Cliente;
 import Modelos.ComputadoraEnsamblada;
@@ -53,7 +53,7 @@ public class VentaServlet extends HttpServlet {
                 List<ComputadoraEnsamblada> computadoras = VendedorComputadoraDB.obtenerComputadorasEnSalaDeVentas();
                 request.setAttribute("computadoras", computadoras);
 
-                request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+                request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
 
             } catch (SQLException ex) {
                 System.out.println("Error: " + ex.getMessage());
@@ -97,7 +97,7 @@ public class VentaServlet extends HttpServlet {
             request.setAttribute("computadoras", computadoras);
             request.setAttribute("detalleVenta", detalleVenta);
             request.getSession().setAttribute("detalleVenta", detalleVenta);
-            request.getRequestDispatcher("seleccionarComputadora.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/seleccionarComputadora.jsp").forward(request, response);
         } else if ("confirmarVenta".equals(action)) {
             System.out.println("Se está ejecutando la acción de confirmarVenta");
 

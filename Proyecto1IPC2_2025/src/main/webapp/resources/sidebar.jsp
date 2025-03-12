@@ -53,25 +53,25 @@
 
                 <% } else if (rol.equals("Vendedor")) { %>
                 <!-- Opciones para Encargado de Ventas -->
-                <a href="buscarCliente.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/buscarCliente.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cart-fill me-2"></i>Registrar Venta
                 </a>
-                <a href="registrarDevolucion.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/registrarDevolucion.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-arrow-counterclockwise me-2"></i>Registrar Devolución
                 </a>
-                <a href="consultarComprasCliente.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/consultarComprasCliente.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-journal-check me-2"></i>Consultar Compras de Clientes
                 </a>
-                <a href="consultarDevoluciones.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/consultarDevoluciones.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-journal-x me-2"></i>Consultar Devoluciones de Clientes
                 </a>
-                <a href="ConsultarComputadorasServlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-display me-2"></i>Consultar Computadoras Disponibles
                 </a>
-                <a href="mostrarNumeroFactura.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/mostrarNumeroFactura.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-calendar-day me-2"></i>Consultar Detalles Factura
                 </a>
-                <a href="ventasDelDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Vendedor/ventasDelDia.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-calendar-day me-2"></i>Consultar Ventas del Día
                 </a>
                 <% }%>

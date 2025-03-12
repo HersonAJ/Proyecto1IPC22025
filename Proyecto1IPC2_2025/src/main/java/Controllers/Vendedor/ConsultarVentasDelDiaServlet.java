@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import backendDB.ModelosDB.VentaDB;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class ConsultarVentasDelDiaServlet extends HttpServlet {
             request.setAttribute("ventas", ventas);
             
             // Redirigir al JSP para mostrar los resultados
-            request.getRequestDispatcher("ventasDelDia.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/ventasDelDia.jsp").forward(request, response);
         } catch (SQLException e) {
             // Enviar un error HTTP 500 en caso de problemas
             System.out.println("Error al obtener las ventas: " + e.getMessage());

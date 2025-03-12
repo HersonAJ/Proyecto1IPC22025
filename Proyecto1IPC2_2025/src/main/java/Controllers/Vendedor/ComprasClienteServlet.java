@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Vendedor;
 
 import Modelos.Cliente;
 import Modelos.Venta;
@@ -36,7 +36,7 @@ public class ComprasClienteServlet extends HttpServlet {
             // Validar que se haya ingresado un NIT
             if (nit == null || nit.trim().isEmpty()) {
                 request.setAttribute("error", "Debe ingresar un NIT para buscar las compras.");
-                request.getRequestDispatcher("buscarCliente.jsp").forward(request, response);
+                request.getRequestDispatcher("Vendedor/buscarCliente.jsp").forward(request, response);
                 return;
             }
 
@@ -44,7 +44,7 @@ public class ComprasClienteServlet extends HttpServlet {
             Cliente cliente = ClienteDB.obtenerClientePorNit(nit);
             if (cliente == null) {
                 request.setAttribute("error", "No se encontró un cliente con el NIT proporcionado.");
-                request.getRequestDispatcher("buscarCliente.jsp").forward(request, response);
+                request.getRequestDispatcher("Vendedor/buscarCliente.jsp").forward(request, response);
                 return;
             }
 
@@ -60,12 +60,12 @@ public class ComprasClienteServlet extends HttpServlet {
 
             // Pasar datos al JSP
             request.setAttribute("cliente", cliente);
-            request.getRequestDispatcher("consultarComprasCliente.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/consultarComprasCliente.jsp").forward(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al procesar la solicitud. Inténtelo más tarde.");
-            request.getRequestDispatcher("buscarCliente.jsp").forward(request, response);
+            request.getRequestDispatcher("Vendedor/buscarCliente.jsp").forward(request, response);
         }
     }
 }

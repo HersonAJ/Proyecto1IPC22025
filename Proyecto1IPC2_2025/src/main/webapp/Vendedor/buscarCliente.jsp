@@ -28,7 +28,7 @@
                     <% } %>
 
                     <!-- Formulario para buscar cliente por NIT -->
-                    <form action="ClienteServlet" method="post" class="mt-3">
+                    <form action="${pageContext.request.contextPath}/ClienteServlet" method="post" class="mt-3">
                         <input type="hidden" name="action" value="buscar">
                         <div class="form-group">
                             <label for="nit">Ingrese el NIT del Cliente:</label>
@@ -48,7 +48,7 @@
                             <p><strong>Nombre:</strong> <%= cliente.getNombre() %></p>
                             <p><strong>Dirección:</strong> <%= cliente.getDireccion() %></p>
                             <!-- Botón para continuar con la venta -->
-                            <form action="VentaServlet" method="post" class="mt-3">
+                            <form action="${pageContext.request.contextPath}/VentaServlet" method="post" class="mt-3">
                                 <input type="hidden" name="action" value="cargarComputadoras">
                                 <input type="hidden" name="nit" value="<%= cliente.getNit() %>">
                                 <button type="submit" class="btn btn-success">Continuar con la Venta</button>
@@ -61,7 +61,7 @@
                        if (clienteNoEncontrado != null) { %>
                         <div id="clienteNuevo" class="mt-5">
                             <h4>Registrar Nuevo Cliente:</h4>
-                            <form action="ClienteServlet" method="post">
+                            <form action="${pageContext.request.contextPath}/ClienteServlet" method="post">
                                 <input type="hidden" name="action" value="registrar">
                                 <div class="form-group">
                                     <label for="nitNuevo">NIT:</label>

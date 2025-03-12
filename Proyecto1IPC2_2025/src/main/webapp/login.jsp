@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <h2 class="mt-5">Inicio de Sesión</h2>
-        <form action="LoginServlet" method="post" class="mt-3">
+        <form action="${pageContext.request.contextPath}/LoginServlet" method="post" class="mt-3">
             <div class="form-group">
                 <label for="username">Nombre de Usuario:</label>
                 <input type="text" class="form-control" id="username" name="username" required>

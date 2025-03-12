@@ -47,12 +47,12 @@
                     <% } %>
 
                     <!-- Botón para mostrar/ocultar formulario de agregar -->
-                    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#formularioAgregar" aria-expanded="false" aria-controls="formularioAgregar">
+                    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAgregarComponente" aria-expanded="false" aria-controls="collapseAgregarComponente">
                         Agregar Componente
                     </button>
 
                     <!-- Formulario para agregar un nuevo componente -->
-                    <div class="collapse" id="formularioAgregar">
+                    <div class="collapse" id="collapseAgregarComponente">
                         <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post">
                             <div class="form-group">
                                 <label for="nombre">Nombre:</label>
@@ -91,7 +91,7 @@
                                     <td><%= componente.getCantidadDisponible() %></td>
                                     <td>
                                         <!-- Botón para mostrar/ocultar formulario de edición -->
-                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#formularioEditar_<%= componente.getIdComponente() %>" aria-expanded="false" aria-controls="formularioEditar_<%= componente.getIdComponente() %>">
+                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEditarComponente_<%= componente.getIdComponente() %>" aria-expanded="false" aria-controls="collapseEditarComponente_<%= componente.getIdComponente() %>">
                                             Editar
                                         </button>
 
@@ -106,25 +106,27 @@
                                     </td>
                                 </tr>
                                 <!-- Formulario de edición -->
-                                <tr class="collapse" id="formularioEditar_<%= componente.getIdComponente() %>">
+                                <tr>
                                     <td colspan="5">
-                                        <h5>Editar Componente: <%= componente.getNombre() %></h5>
-                                        <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post">
-                                            <input type="hidden" name="idComponente" value="<%= componente.getIdComponente() %>">
-                                            <div class="form-group">
-                                                <label for="nombreEditar">Nombre:</label>
-                                                <input type="text" class="form-control" name="nombre" value="<%= componente.getNombre() %>" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="costoEditar">Costo:</label>
-                                                <input type="number" step="0.01" class="form-control" name="costo" value="<%= componente.getCosto() %>" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
-                                                <input type="number" class="form-control" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                        </form>
+                                        <div id="collapseEditarComponente_<%= componente.getIdComponente() %>" class="collapse">
+                                            <h5>Editar Componente: <%= componente.getNombre() %></h5>
+                                            <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post">
+                                                <input type="hidden" name="idComponente" value="<%= componente.getIdComponente() %>">
+                                                <div class="form-group">
+                                                    <label for="nombreEditar">Nombre:</label>
+                                                    <input type="text" class="form-control" name="nombre" value="<%= componente.getNombre() %>" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="costoEditar">Costo:</label>
+                                                    <input type="number" step="0.01" class="form-control" name="costo" value="<%= componente.getCosto() %>" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
+                                                    <input type="number" class="form-control" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             <% }
