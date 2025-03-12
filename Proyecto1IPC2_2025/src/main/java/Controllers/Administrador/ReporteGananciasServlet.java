@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.ComputadoraEnsamblada;
 import Modelos.DetalleVenta;
@@ -80,7 +80,7 @@ public class ReporteGananciasServlet extends HttpServlet {
             request.setAttribute("gananciaNeta", gananciaNeta);
             request.setAttribute("computadorasVendidas", computadorasVendidas);
 
-            request.getRequestDispatcher("reporteGanancias.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reporteGanancias.jsp").forward(request, response);
 
         } catch (SQLException e) {
             throw new ServletException("Error al obtener los datos del reporte de ganancias", e);

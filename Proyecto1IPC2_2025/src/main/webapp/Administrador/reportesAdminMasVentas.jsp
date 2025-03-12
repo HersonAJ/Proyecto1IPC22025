@@ -41,7 +41,7 @@
                         <% }%>
 
                         <!-- Formulario para seleccionar el rango de fechas -->
-                        <form action="ReportesAdminMasVentasServlet" method="post" class="mt-4">
+                        <form action="${pageContext.request.contextPath}/ReportesAdminMasVentasServlet" method="post" class="mt-4">
                             <div class="form-group">
                                 <label for="fechaInicio">Fecha de Inicio:</label>
                                 <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" 

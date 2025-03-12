@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.Cliente;
 import Modelos.DetalleDevolucion;
@@ -52,7 +52,7 @@ public class ReporteDevolucionesServlet extends HttpServlet {
 
             // Pasar la lista de devoluciones a la vista (JSP)
             request.setAttribute("devoluciones", devoluciones);
-            request.getRequestDispatcher("reporteDevoluciones.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reporteDevoluciones.jsp").forward(request, response);
 
         } catch (SQLException e) {
             throw new ServletException("Error al obtener los datos del reporte de devoluciones", e);

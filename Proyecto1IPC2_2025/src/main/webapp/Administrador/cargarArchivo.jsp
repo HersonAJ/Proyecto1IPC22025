@@ -29,7 +29,7 @@
             <main class="col-md-9">
                 <div class="container mt-5">
                     <h2>Cargar Archivo de Datos</h2>
-                    <form action="CargarArchivoServlet" method="post" enctype="multipart/form-data">
+                    <form action="${pageContext.request.contextPath}/CargarArchivoServlet" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="archivo">Seleccionar archivo:</label>
                             <input type="file" class="form-control-file" id="archivo" name="archivo" required>

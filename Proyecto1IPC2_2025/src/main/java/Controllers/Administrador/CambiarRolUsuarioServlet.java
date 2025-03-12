@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import backendDB.ModelosDB.GestionarUsuariosDB;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class CambiarRolUsuarioServlet extends HttpServlet {
         
         if(usuarioActivo.equals(request.getParameter("nombreUsuario"))) {
             System.out.println("No se puede cambiar el rol del usuario activo. ");
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=noCambioRol");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=noCambioRol");
         }
         
         System.out.println("Cambiar Rol - ID Usuario " + idUsuario);
@@ -36,9 +36,9 @@ public class CambiarRolUsuarioServlet extends HttpServlet {
         boolean exito = GestionarUsuariosDB.cambiarRolUsuario(idUsuario, nuevoRol);
         
         if(exito) {
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=rolActualizado");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=rolActualizado");
         } else {
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=error");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=error");
         }
     }
 

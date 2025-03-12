@@ -20,7 +20,7 @@
             <main class="col-md-9">
                 <div class="container">
                     <h2 class="mt-5">Registro de Usuario</h2>
-                    <form action="RegistroServlet" method="post" class="mt-3">
+                    <form action="${pageContext.request.contextPath}/RegistroServlet" method="post" class="mt-3">
                         <div class="form-group">
                             <label for="username">Nombre de Usuario:</label>
                             <input type="text" class="form-control" id="username" name="username" required>

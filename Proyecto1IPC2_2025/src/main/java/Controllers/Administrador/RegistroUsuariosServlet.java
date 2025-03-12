@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.Usuario;
 import backendDB.ModelosDB.UsuarioDB;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,9 +33,9 @@ public class RegistroUsuariosServlet extends HttpServlet {
 
         boolean registrado = UsuarioDB.registrarUsuario(usuario);
         if (registrado) {
-            response.sendRedirect("registroExitoso.jsp");
+            response.sendRedirect("Administrador/registroExitoso.jsp");
         } else {
-            response.sendRedirect("error.jsp");
+            response.sendRedirect("Administrador/error.jsp");
         }
     }
 }

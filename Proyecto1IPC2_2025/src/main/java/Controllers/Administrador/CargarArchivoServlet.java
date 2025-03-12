@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.ProcesadorArchivo.ProcesadorArchivo;
 import java.io.IOException;
@@ -52,6 +52,6 @@ public class CargarArchivoServlet extends HttpServlet {
         }
 
         request.setAttribute("logProcesamiento", logProcesamiento.toString());
-        request.getRequestDispatcher("cargarArchivo.jsp").forward(request, response);
+        request.getRequestDispatcher("Administrador/cargarArchivo.jsp").forward(request, response);
     }
 }

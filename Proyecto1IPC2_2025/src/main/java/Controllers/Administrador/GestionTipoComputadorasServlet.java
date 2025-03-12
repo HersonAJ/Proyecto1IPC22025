@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.TipoComputadora;
 import backendDB.ModelosDB.EnsamblajePiezaDB;
@@ -35,7 +35,7 @@ public class GestionTipoComputadorasServlet extends HttpServlet {
         }
 
         // Redirigir al JSP para mostrar la lista
-        request.getRequestDispatcher("gestionarTipoComputadoras.jsp").forward(request, response);
+        request.getRequestDispatcher("Administrador/gestionarTipoComputadoras.jsp").forward(request, response);
     }
 
     @Override
@@ -45,6 +45,18 @@ public class GestionTipoComputadorasServlet extends HttpServlet {
         String precioVentaStr = request.getParameter("precioVenta");
         String[] componentes = request.getParameterValues("componente[]");
         String[] cantidadesStr = request.getParameterValues("cantidad[]");
+
+        // Imprimir valores para depuración
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Precio de Venta: " + precioVentaStr);
+
+        if (componentes != null && cantidadesStr != null) {
+            for (int i = 0; i < componentes.length; i++) {
+                System.out.println("Componente: " + componentes[i] + ", Cantidad: " + cantidadesStr[i]);
+            }
+        } else {
+            System.out.println("Componentes o cantidades no recibidos correctamente.");
+        }
 
         try {
             // Validar nombre
@@ -63,6 +75,50 @@ public class GestionTipoComputadorasServlet extends HttpServlet {
                 throw new Exception("El precio de venta debe ser un número válido.");
             }
 
+            // Validar componentes y cantidades antes de registrar en la base de datos
+            if (componentes == null || cantidadesStr == null) {
+                throw new Exception("Debe seleccionar al menos un componente con una cantidad válida.");
+            }
+
+            // Verificar correlación entre componentes seleccionados y cantidades
+            for (int i = 0; i < componentes.length; i++) {
+                String componente = componentes[i].trim();
+                String cantidadStr = (i < cantidadesStr.length) ? cantidadesStr[i].trim() : "";
+
+                // Si el componente está seleccionado, pero la cantidad es inválida
+                if (cantidadStr.isEmpty()) {
+                    throw new Exception("La cantidad es obligatoria para el componente: " + componente);
+                }
+
+                try {
+                    int cantidad = Integer.parseInt(cantidadStr);
+                    if (cantidad <= 0) {
+                        throw new Exception("La cantidad debe ser mayor a 0 para el componente: " + componente);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new Exception("La cantidad debe ser un número válido para el componente: " + componente);
+                }
+            }
+
+            for (int i = 0; i < componentes.length; i++) {
+                String componente = componentes[i].trim();
+                String cantidadStr = cantidadesStr[i].trim();
+
+                // Validar que la cantidad no esté vacía o sea menor o igual a 0
+                if (cantidadStr.isEmpty()) {
+                    throw new Exception("La cantidad es obligatoria para el componente: " + componente);
+                }
+
+                try {
+                    int cantidad = Integer.parseInt(cantidadStr);
+                    if (cantidad <= 0) {
+                        throw new Exception("La cantidad debe ser mayor a 0 para el componente: " + componente);
+                    }
+                } catch (NumberFormatException e) {
+                    throw new Exception("La cantidad debe ser un número válido para el componente: " + componente);
+                }
+            }
+
             // Crear el tipo de computadora
             TipoComputadora tipoComputadora = new TipoComputadora();
             tipoComputadora.setNombre(nombre.trim());
@@ -74,22 +130,14 @@ public class GestionTipoComputadorasServlet extends HttpServlet {
             }
 
             // Asociar componentes al nuevo tipo de computadora
-            if (componentes != null && cantidadesStr != null) {
-                for (int i = 0; i < componentes.length; i++) {
-                    String componente = componentes[i].trim();
-                    int cantidad;
-                    try {
-                        cantidad = Integer.parseInt(cantidadesStr[i].trim());
-                        if (cantidad <= 0) throw new Exception("La cantidad debe ser mayor a 0.");
-                    } catch (NumberFormatException e) {
-                        throw new Exception("La cantidad debe ser un número válido para el componente: " + componente);
-                    }
+            for (int i = 0; i < componentes.length; i++) {
+                String componente = componentes[i].trim();
+                int cantidad = Integer.parseInt(cantidadesStr[i].trim());
 
-                    // Crear la relación entre el tipo de computadora y el componente
-                    boolean relacionCreada = EnsamblajePiezaDB.crearRelacion(tipoComputadora.getNombre(), componente, cantidad);
-                    if (!relacionCreada) {
-                        throw new Exception("No se pudo crear la relación para el componente: " + componente);
-                    }
+                // Crear la relación entre el tipo de computadora y el componente
+                boolean relacionCreada = EnsamblajePiezaDB.crearRelacion(tipoComputadora.getNombre(), componente, cantidad);
+                if (!relacionCreada) {
+                    throw new Exception("No se pudo crear la relación para el componente: " + componente);
                 }
             }
 
@@ -103,4 +151,3 @@ public class GestionTipoComputadorasServlet extends HttpServlet {
         doGet(request, response);
     }
 }
-

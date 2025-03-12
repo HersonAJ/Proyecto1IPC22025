@@ -29,7 +29,7 @@
             <main class="col-md-9">
                 <div class="container">
                     <h2 class="mt-4">Reporte de Ganancias</h2>
-                    <form method="post" action="ReporteGananciasServlet">
+                    <form method="post" action="${pageContext.request.contextPath}/ReporteGananciasServlet">
                         <div class="form-group">
                             <label for="fechaInicio">Fecha de Inicio:</label>
                             <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>

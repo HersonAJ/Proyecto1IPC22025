@@ -1,12 +1,10 @@
 <%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
 <%@page import="Modelos.ComputadoraEnsamblada"%>
+<%@page import="java.util.List"%>
 <%@page import="Modelos.Venta"%>
-<%@page import="backendDB.ModelosDB.VentaDB"%>
-<%@ page import="java.util.List" %>
-<%@ page import="Modelos.Devolucion" %>
-<%@ page import="Modelos.Cliente" %>
-<%@ page import="Modelos.Usuario" %>
-<%@ page import="Modelos.DetalleDevolucion" %>
+<%@page import="Modelos.Cliente"%>
+<%@page import="Modelos.Usuario"%>
+<%@page import="Modelos.DetalleVenta"%>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
 
@@ -15,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Devoluciones</title>
+    <title>Reporte de Ventas</title>
     <script>
         function toggleDetalles(id) {
             var detalles = document.getElementById("detalles_" + id);
@@ -35,8 +33,8 @@
             </aside>
             <main class="col-md-9">
                 <div class="container">
-                    <h2 class="mt-4">Reporte de Devoluciones</h2>
-                    <form method="post" action="ReporteDevoluciones">
+                    <h2 class="mt-4">Reporte de Ventas</h2>
+                    <form method="post" action="${pageContext.request.contextPath}/reporteVentas">
                         <div class="form-group">
                             <label for="fechaInicio">Fecha de Inicio:</label>
                             <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
@@ -49,38 +47,28 @@
                     </form>
 
                     <%
-                        List<Devolucion> devoluciones = (List<Devolucion>) request.getAttribute("devoluciones");
-                        if (devoluciones != null && !devoluciones.isEmpty()) {
+                        List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
+                        if (ventas != null && !ventas.isEmpty()) {
                     %>
                     <table class="table table-striped mt-4">
                         <thead>
                             <tr>
-                                <th>ID Devolución</th>
                                 <th>ID Venta</th>
                                 <th>Fecha Venta</th>
                                 <th>Cliente</th>
-                                <th>Usuario</th>
-                                <th>Fecha Devolución</th>
-                                <th>Monto Pérdida</th>
+                                <th>Vendedor</th>
+                                <th>Total Venta</th>
                                 <th>Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <% for (Devolucion devolucion : devoluciones) { %>
+                            <% for (Venta venta : ventas) { %>
                             <tr>
-                                <td><%= devolucion.getIdDevolucion() %></td>
-                                <td><%= devolucion.getIdVenta() %></td>
+                                <td><%= venta.getIdVenta() %></td>
+                                <td><%= venta.getFechaVenta() %></td>
                                 <td>
                                     <%
-                                        Venta venta = VentaDB.obtenerVenta(devolucion.getIdVenta());
-                                        if (venta != null) {
-                                            out.print(venta.getFechaVenta());
-                                        }
-                                    %>
-                                </td>
-                                <td>
-                                    <%
-                                        Cliente cliente = (Cliente) request.getAttribute("cliente_" + devolucion.getIdDevolucion());
+                                        Cliente cliente = (Cliente) request.getAttribute("cliente_" + venta.getIdVenta());
                                         if (cliente != null) {
                                             out.print(cliente.getNombre());
                                         }
@@ -88,20 +76,19 @@
                                 </td>
                                 <td>
                                     <%
-                                        Usuario usuarioDevolucion = (Usuario) request.getAttribute("usuario_" + devolucion.getIdDevolucion());
-                                        if (usuarioDevolucion != null) {
-                                            out.print(usuarioDevolucion.getNombreUsuario());
+                                        Usuario usuarioVenta = (Usuario) request.getAttribute("usuarioVenta_" + venta.getIdVenta());
+                                        if (usuarioVenta != null) {
+                                            out.print(usuarioVenta.getNombreUsuario());
                                         }
                                     %>
                                 </td>
-                                <td><%= devolucion.getFechaDevolucion() %></td>
-                                <td><%= devolucion.getMontoPerdida() %></td>
+                                <td><%= venta.getTotalVenta() %></td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" type="button" onclick="toggleDetalles(<%= devolucion.getIdDevolucion() %>)">Ver Detalles</button>
+                                    <button class="btn btn-info btn-sm" type="button" onclick="toggleDetalles(<%= venta.getIdVenta() %>)">Ver Detalles</button>
                                 </td>
                             </tr>
-                            <tr id="detalles_<%= devolucion.getIdDevolucion() %>" style="display: none;">
-                                <td colspan="8">
+                            <tr id="detalles_<%= venta.getIdVenta() %>" style="display: none;">
+                                <td colspan="6">
                                     <table class="table table-bordered mt-2">
                                         <thead>
                                             <tr>
@@ -113,9 +100,9 @@
                                         </thead>
                                         <tbody>
                                             <%
-                                                List<DetalleDevolucion> detallesDevolucion = (List<DetalleDevolucion>) request.getAttribute("detallesDevolucion_" + devolucion.getIdDevolucion());
-                                                if (detallesDevolucion != null) {
-                                                    for (DetalleDevolucion detalle : detallesDevolucion) {
+                                                List<DetalleVenta> detallesVenta = (List<DetalleVenta>) request.getAttribute("detallesVenta_" + venta.getIdVenta());
+                                                if (detallesVenta != null) {
+                                                    for (DetalleVenta detalle : detallesVenta) {
                                                         ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(detalle.getIdComputadora());
                                                         if (computadora != null) {
                                             %>
@@ -138,7 +125,7 @@
                         </tbody>
                     </table>
                     <% } else { %>
-                    <p class="mt-4">No se encontraron devoluciones en el intervalo de tiempo especificado.</p>
+                    <p class="mt-4">No se encontraron ventas en el intervalo de tiempo especificado.</p>
                     <% } %>
                 </div>
             </main>

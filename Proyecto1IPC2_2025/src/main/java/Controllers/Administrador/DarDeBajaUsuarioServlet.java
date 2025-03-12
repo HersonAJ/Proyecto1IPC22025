@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import backendDB.ModelosDB.GestionarUsuariosDB;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class DarDeBajaUsuarioServlet extends HttpServlet {
         
         if(usuarioActivo.equals(request.getParameter("nombreUsuario"))) {
             System.out.println("No se puede dar de baja al usuario activo");
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=noBaja");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=noBaja");
         }
         
         
@@ -36,9 +36,9 @@ public class DarDeBajaUsuarioServlet extends HttpServlet {
         boolean exito = GestionarUsuariosDB.darDeBajaUsuario(idUsuario);
         
         if (exito) {
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=usuarioInactivado");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=usuarioInactivado");
         } else {
-            response.sendRedirect("gestionarUsuarios.jsp?mensaje=error");
+            response.sendRedirect("Administrador/gestionarUsuarios.jsp?mensaje=error");
         }
     }
 

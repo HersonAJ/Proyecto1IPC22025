@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.Cliente;
 import Modelos.DetalleVenta;
@@ -54,7 +54,7 @@ public class ReporteVentasServlet extends HttpServlet {
 
             // Pasar la lista de ventas a la vista
             request.setAttribute("ventas", ventas);
-            request.getRequestDispatcher("reporteVentas.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reporteVentas.jsp").forward(request, response);
         } catch (SQLException e) {
             throw new ServletException("Error al obtener los datos del reporte de ventas", e);
         }

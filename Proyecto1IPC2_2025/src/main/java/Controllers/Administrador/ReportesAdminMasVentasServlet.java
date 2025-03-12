@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import Modelos.Usuario;
 import backendDB.ModelosDB.ReportesAdminDB;
@@ -31,7 +31,7 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
         // Validar que ambos parámetros estén presentes
         if (fechaInicio == null || fechaInicio.isEmpty() || fechaFin == null || fechaFin.isEmpty()) {
             request.setAttribute("error", "Por favor, selecciona un rango de fechas válido para generar el reporte.");
-            request.getRequestDispatcher("reporteMasVentas.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reportesAdminMasVentas.jsp").forward(request, response);
             return;
         }
 
@@ -51,12 +51,12 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
             request.setAttribute("fechaFin", fechaFin);
 
             // Redirigir a la vista JSP del reporte
-            request.getRequestDispatcher("reportesAdminMasVentas.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reportesAdminMasVentas.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al generar el reporte: " + e.getMessage());
-            request.getRequestDispatcher("reporteMasVentas.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reportesAdminMasVentas.jsp").forward(request, response);
         }
     }
 
@@ -64,7 +64,7 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Redirigir al formulario del reporte para evitar acceso directo
-        request.getRequestDispatcher("reporteMasVentas.jsp").forward(request, response);
+        request.getRequestDispatcher("Administrador/reportesAdminMasVentas.jsp").forward(request, response);
     }
 }
 

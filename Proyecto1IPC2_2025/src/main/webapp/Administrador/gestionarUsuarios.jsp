@@ -42,7 +42,7 @@
                                 <td><%= u.getNombreUsuario() %></td>
                                 <td><%= u.getRolNombre() %></td>
                                 <td>
-                                    <form action="CambiarRolUsuarioServlet" method="post" style="display:inline;">
+                                    <form action="${pageContext.request.contextPath}/CambiarRolUsuarioServlet" method="post" style="display:inline;">
                                         <input type="hidden" name="idUsuario" value="<%= u.getIdUsuario() %>">
                                         <select name="nuevoRol" class="form-control mb-2">
                                             <option value="2" <%= u.getRolNombre().equals("Ensamblador") ? "selected" : "" %>>Ensamblador</option>
@@ -51,7 +51,7 @@
                                         </select>
                                         <button type="submit" class="btn btn-warning btn-sm">Cambiar Rol</button>
                                     </form>
-                                    <form action="DarDeBajaUsuarioServlet" method="post" style="display:inline;">
+                                    <form action="${pageContext.request.contextPath}/DarDeBajaUsuarioServlet" method="post" style="display:inline;">
                                         <input type="hidden" name="idUsuario" value="<%= u.getIdUsuario() %>">
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres dar de baja a este usuario?');">Dar de Baja</button>
                                     </form>

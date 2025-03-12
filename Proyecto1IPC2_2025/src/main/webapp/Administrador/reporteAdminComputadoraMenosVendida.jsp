@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte - Computadoras Más Vendidas</title>
+    <title>Reporte - Computadoras Menos Vendidas</title>
     <jsp:include page="/resources/resources.jsp" />
 </head>
 <body>
@@ -18,10 +18,10 @@
             </aside>
             <main class="col-md-9">
                 <div class="container mt-5">
-                    <h2>Reporte - Computadoras Más Vendidas</h2>
+                    <h2>Reporte - Computadoras Menos Vendidas</h2>
 
                     <!-- Formulario de rango de fechas -->
-                    <form action="ReportesComputadoraMasVendidaServlet" method="post" class="mt-4">
+                    <form action="${pageContext.request.contextPath}/ReportesAdminComputadoraMenosVendidaServlet" method="post" class="mt-4">
                         <div class="form-group">
                             <label for="fechaInicio">Fecha de Inicio:</label>
                             <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" 

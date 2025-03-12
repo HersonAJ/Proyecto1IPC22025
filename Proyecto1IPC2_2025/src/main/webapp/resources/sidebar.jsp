@@ -14,19 +14,19 @@
 
                 <% if (rol.equals("Administrador")) { %>
                 <!-- Opciones para Administrador -->
-                <a href="registro.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Administrador/registro.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-person-plus-fill me-2"></i>Crear Usuario
                 </a>
-                <a href="gestionarUsuarios.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Administrador/gestionarUsuarios.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-gear-fill me-2"></i>Gestionar Usuarios
                 </a>
-                <a href="reportesAdmin.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Administrador/reportesAdmin.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Generar Reportes
                 </a>
-                <a href="GestionComputadorasServlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/GestionComputadorasServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-pc-display-horizontal me-2"></i>Crear Tipo de Computadora
                 </a>
-                <a href="cargarArchivo.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Administrador/cargarArchivo.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cloud-upload-fill me-2"></i>Cargar Archivo
                 </a>
 

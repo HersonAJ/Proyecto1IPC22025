@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Administrador;
 
 import backendDB.ModelosDB.ReportesAdminDB;
 import java.io.IOException;
@@ -39,12 +39,12 @@ public class ReportesAdminComputadoraMenosVendidaServlet extends HttpServlet {
             request.setAttribute("fechaFin", fechaFin);
 
             // Redirigir a la vista (JSP)
-            request.getRequestDispatcher("reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al generar el reporte: " + e.getMessage());
-            request.getRequestDispatcher("reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
+            request.getRequestDispatcher("Administrador/reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
         }
     }
 
@@ -52,6 +52,6 @@ public class ReportesAdminComputadoraMenosVendidaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Redirigir al JSP inicial del formulario del reporte
-        request.getRequestDispatcher("reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
+        request.getRequestDispatcher("Administrador/reporteAdminComputadoraMenosVendida.jsp").forward(request, response);
     }
 }
