@@ -65,7 +65,7 @@
                 <a href="${pageContext.request.contextPath}/Vendedor/consultarDevoluciones.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-journal-x me-2"></i>Consultar Devoluciones de Clientes
                 </a>
-                <a href="" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/ConsultarComputadorasEnSalaDeVentaServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-display me-2"></i>Consultar Computadoras Disponibles
                 </a>
                 <a href="${pageContext.request.contextPath}/Vendedor/mostrarNumeroFactura.jsp" class="list-group-item list-group-item-action bg-primary text-white">
