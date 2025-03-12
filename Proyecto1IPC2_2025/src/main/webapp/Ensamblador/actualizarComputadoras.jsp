@@ -83,7 +83,7 @@
                                     <td><%= computadora.getEstado() %></td>
                                     <td>
                                         <!-- Formulario para mover a sala de ventas -->
-                                        <form action="ActualizarEstadoComputadoraServlet" method="post" style="display: inline;">
+                                        <form action="${pageContext.request.contextPath}/ActualizarEstadoComputadoraServlet" method="post" style="display: inline;">
                                             <input type="hidden" name="idComputadora" value="<%= computadora.getIdComputadora() %>">
                                             <button type="submit" class="btn btn-primary btn-sm">Mover a Sala de Ventas</button>
                                         </form>

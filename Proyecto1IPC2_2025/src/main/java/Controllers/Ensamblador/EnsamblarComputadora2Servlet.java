@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Ensamblador;
 
 import Modelos.TipoComputadora;
 import Modelos.Usuario;
@@ -35,11 +35,11 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
             request.setAttribute("tiposComputadoras", tiposComputadoras);
 
             // Redirigir al JSP correspondiente
-            request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al cargar los datos.");
-            request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
         }
     }
 
@@ -72,7 +72,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
                     request.setAttribute("computadoraSeleccionada", computadoraSeleccionada);
                 }
 
-                request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+                request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
                 return;
             }
 
@@ -84,7 +84,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
                 request.setAttribute("error", "La fecha es obligatoria.");
                 List<TipoComputadora> tiposComputadoras = TipoComputadoraDB.obtenerTiposComputadoras();
                 request.setAttribute("tiposComputadoras", tiposComputadoras);
-                request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+                request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
                 return;
             }
 
@@ -97,7 +97,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
                 request.setAttribute("error", "No hay suficiente inventario para los siguientes componentes: " + String.join(", ", componentesInsuficientes));
                 List<TipoComputadora> tiposComputadoras = TipoComputadoraDB.obtenerTiposComputadoras();
                 request.setAttribute("tiposComputadoras", tiposComputadoras);
-                request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+                request.getRequestDispatcher("EnsambladorensamblarComputadora1.jsp").forward(request, response);
                 return;
             }
 
@@ -116,7 +116,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
             // Recargar los tipos de computadoras y redirigir al JSP después del ensamblaje
             List<TipoComputadora> tiposComputadoras = TipoComputadoraDB.obtenerTiposComputadoras();
             request.setAttribute("tiposComputadoras", tiposComputadoras);
-            request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al procesar la solicitud.");
@@ -126,7 +126,7 @@ public class EnsamblarComputadora2Servlet extends HttpServlet {
             } catch (Exception ex) {
                 ex.printStackTrace(); // Manejo de error adicional en caso de falla al cargar tipos
             }
-            request.getRequestDispatcher("ensamblarComputadora1.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/ensamblarComputadora1.jsp").forward(request, response);
         }
     }
 

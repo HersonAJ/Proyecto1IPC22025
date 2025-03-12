@@ -20,7 +20,7 @@
                         <h2>Consultar Componentes</h2>
 
                         <!-- Formulario de búsqueda -->
-                        <form action="ConsultarComponentesServlet" method="get" class="mb-4">
+                        <form action="${pageContext.request.contextPath}/ConsultarComponentesServlet" method="get" class="mb-4">
                             <div class="input-group">
                                 <input type="text" name="busqueda" class="form-control" placeholder="Buscar componente..." />
                                 <button type="submit" class="btn btn-primary">Buscar</button>

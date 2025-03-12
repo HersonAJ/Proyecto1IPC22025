@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Ensamblador;
 
 import Modelos.ComputadoraEnsamblada;
 import backendDB.ModelosDB.ComputadorasEnsambladasDB;
@@ -34,14 +34,14 @@ public class ConsultarComputadorasServlet extends HttpServlet {
             request.setAttribute("computadorasDisponibles", computadorasDisponibles);
 
             // Redirigir al JSP
-            request.getRequestDispatcher("consultarComputadoras.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/consultarComputadoras.jsp").forward(request, response);
         } catch (Exception e) {
             // Manejo de excepciones en caso de error de base de datos
             System.out.println("Error al ejecutar el método obtenerDetallesComputadorasEnsambladas: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al consultar las computadoras ensambladas.");
             request.setAttribute("computadorasDisponibles", null); // Asegurar que la lista esté vacía en caso de error
-            request.getRequestDispatcher("consultarComputadoras.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/consultarComputadoras.jsp").forward(request, response);
         }
     }
 }

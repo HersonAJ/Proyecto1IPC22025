@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Ensamblador;
 
 import Modelos.Componente;
 import backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB;
@@ -40,11 +40,11 @@ public class ConsultarComponentesServlet extends HttpServlet {
             request.setAttribute("componentes", componentes);
 
             // Redirigir al JSP
-            request.getRequestDispatcher("consultarComponentes.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/consultarComponentes.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al consultar los componentes.");
-            request.getRequestDispatcher("consultarComponentes.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/consultarComponentes.jsp").forward(request, response);
         }
     }
 }

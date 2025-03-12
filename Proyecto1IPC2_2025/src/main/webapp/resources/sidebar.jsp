@@ -34,19 +34,19 @@
 
                 <% } else if (rol.equals("Ensamblador")) { %>
                 <!-- Opciones para Encargado de Ensamblaje -->
-                <a href="gestionarComponentes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/Ensamblador/gestionarComponentes.jsp" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-tools me-2"></i>Gestionar Componentes
                 </a>
-                <a href="EnsamblarComputadora2Servlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/EnsamblarComputadora2Servlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-cpu me-2"></i>Ensamblar Computadoras
                 </a>
-                <a href="ActualizarEstadoComputadoraServlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/ActualizarEstadoComputadoraServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-card-list me-2"></i>Registrar Computadoras Ensambladas
                 </a>
-                <a href="ConsultarComponentesServlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/ConsultarComponentesServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-search me-2"></i>Consultar Componentes
                 </a>
-                <a href="ConsultarComputadorasServlet" class="list-group-item list-group-item-action bg-primary text-white">
+                <a href="${pageContext.request.contextPath}/ConsultarComputadorasServlet" class="list-group-item list-group-item-action bg-primary text-white">
                     <i class="bi bi-display me-2"></i>Consultar Computadoras Ensambladas
                 </a>
 

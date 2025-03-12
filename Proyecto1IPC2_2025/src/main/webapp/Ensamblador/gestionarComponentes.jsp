@@ -1,6 +1,6 @@
 <%@page import="backendDB.ModelosDB.ComponentesDB.ComponenteConsultaDB"%>
-<%@ page import="java.util.List" %>
-<%@ page import="Modelos.Componente" %>
+<%@ page import="java.util.List"%>
+<%@ page import="Modelos.Componente"%>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
 
@@ -21,32 +21,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Componentes</title>
-    <script>
-        function toggleFormularioAgregar() {
-            var formulario = document.getElementById("formularioAgregar");
-            if (formulario.style.display === "none") {
-                formulario.style.display = "block";
-            } else {
-                formulario.style.display = "none";
-            }
-        }
-
-        function toggleFormularioEditar(id) {
-            var formulario = document.getElementById("formularioEditar_" + id);
-            if (formulario.style.display === "none") {
-                formulario.style.display = "block";
-            } else {
-                formulario.style.display = "none";
-            }
-        }
-
-        function confirmarEliminacion(id) {
-            var confirmar = confirm("¿Estás seguro de que quieres eliminar este componente?");
-            if (confirmar) {
-                window.location.href = "GestionComponentesServlet?action=eliminar&id=" + id;
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="container-fluid">
@@ -60,22 +34,26 @@
 
                     <!-- Mostrar mensajes de éxito o error -->
                     <% if (mensaje != null) { %>
-                        <div class="alert alert-success">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <%= mensaje %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <% } %>
                     <% if (error != null) { %>
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <% } %>
 
                     <!-- Botón para mostrar/ocultar formulario de agregar -->
-                    <button class="btn btn-primary mb-3" onclick="toggleFormularioAgregar()">Agregar Componente</button>
+                    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#formularioAgregar" aria-expanded="false" aria-controls="formularioAgregar">
+                        Agregar Componente
+                    </button>
 
                     <!-- Formulario para agregar un nuevo componente -->
-                    <div id="formularioAgregar" style="display:none;">
-                        <form action="GestionComponentesServlet" method="post">
+                    <div class="collapse" id="formularioAgregar">
+                        <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post">
                             <div class="form-group">
                                 <label for="nombre">Nombre:</label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del componente" required>
@@ -112,27 +90,38 @@
                                     <td>Q<%= String.format("%.2f", componente.getCosto()) %></td>
                                     <td><%= componente.getCantidadDisponible() %></td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm" onclick="toggleFormularioEditar(<%= componente.getIdComponente() %>)">Editar</button>
-                                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion(<%= componente.getIdComponente() %>)">Eliminar</button>
+                                        <!-- Botón para mostrar/ocultar formulario de edición -->
+                                        <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#formularioEditar_<%= componente.getIdComponente() %>" aria-expanded="false" aria-controls="formularioEditar_<%= componente.getIdComponente() %>">
+                                            Editar
+                                        </button>
+
+                                        <!-- Formulario para confirmar eliminación -->
+                                        <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post" style="display:inline;">
+                                            <input type="hidden" name="action" value="eliminar">
+                                            <input type="hidden" name="id" value="<%= componente.getIdComponente() %>">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Eliminar
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
-                                <tr id="formularioEditar_<%= componente.getIdComponente() %>" style="display:none;">
+                                <!-- Formulario de edición -->
+                                <tr class="collapse" id="formularioEditar_<%= componente.getIdComponente() %>">
                                     <td colspan="5">
-                                        <!-- Formulario para editar un componente existente -->
                                         <h5>Editar Componente: <%= componente.getNombre() %></h5>
-                                        <form action="GestionComponentesServlet" method="post">
-                                            <input type="hidden" id="idComponenteEditar" name="idComponente" value="<%= componente.getIdComponente() %>">
+                                        <form action="${pageContext.request.contextPath}/GestionComponentesServlet" method="post">
+                                            <input type="hidden" name="idComponente" value="<%= componente.getIdComponente() %>">
                                             <div class="form-group">
                                                 <label for="nombreEditar">Nombre:</label>
-                                                <input type="text" class="form-control" id="nombreEditar" name="nombre" value="<%= componente.getNombre() %>" required>
+                                                <input type="text" class="form-control" name="nombre" value="<%= componente.getNombre() %>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="costoEditar">Costo:</label>
-                                                <input type="number" step="0.01" class="form-control" id="costoEditar" name="costo" value="<%= componente.getCosto() %>" required>
+                                                <input type="number" step="0.01" class="form-control" name="costo" value="<%= componente.getCosto() %>" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cantidadDisponibleEditar">Cantidad Disponible:</label>
-                                                <input type="number" class="form-control" id="cantidadDisponibleEditar" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
+                                                <input type="number" class="form-control" name="cantidadDisponible" value="<%= componente.getCantidadDisponible() %>" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                                         </form>

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers;
+package Controllers.Ensamblador;
 
 import Modelos.ComputadoraEnsamblada;
 import backendDB.ModelosDB.ComputadorasEnsambladasDB;
@@ -29,12 +29,12 @@ public class ActualizarEstadoComputadoraServlet extends HttpServlet {
             request.setAttribute("computadorasEnsambladas", computadorasEnsambladas);
 
             // Redirigir al JSP para mostrar la lista
-            request.getRequestDispatcher("actualizarComputadoras.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/actualizarComputadoras.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al cargar las computadoras ensambladas.");
             request.setAttribute("computadorasEnsambladas", null); // Asegurar que la lista esté vacía en caso de error
-            request.getRequestDispatcher("actualizarComputadoras.jsp").forward(request, response);
+            request.getRequestDispatcher("Ensamblador/actualizarComputadoras.jsp").forward(request, response);
         }
     }
 
