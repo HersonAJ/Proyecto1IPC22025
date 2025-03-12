@@ -163,16 +163,40 @@
                     <table class="table table-bordered mt-4">
                         <tbody>
                             <tr>
+                                <th>Suma Total de Ventas</th>
+                                <td>
+                                    <%
+                                        double sumaTotalVentas = 0.0;
+                                        for (Venta venta : ventas) {
+                                            sumaTotalVentas += venta.getTotalVenta();
+                                        }
+                                        out.print(String.format("Q%.2f", sumaTotalVentas));
+                                    %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Suma Total de Gastos de Ensamblaje</th>
+                                <td>
+                                    <%
+                                        double sumaTotalGastos = 0.0;
+                                        for (ComputadoraEnsamblada computadora : computadorasVendidas) {
+                                            sumaTotalGastos += computadora.getCostoTotal();
+                                        }
+                                        out.print(String.format("Q%.2f", sumaTotalGastos));
+                                    %>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>Total Ganancia</th>
-                                <td><%= totalGanancia %></td>
+                                <td><%= String.format("Q%.2f", totalGanancia) %></td>
                             </tr>
                             <tr>
                                 <th>Total Pérdida</th>
-                                <td><%= totalPerdida %></td>
+                                <td><%= String.format("Q%.2f", totalPerdida) %></td>
                             </tr>
                             <tr>
                                 <th>Ganancia Neta</th>
-                                <td><%= gananciaNeta %></td>
+                                <td><%= String.format("Q%.2f", gananciaNeta) %></td>
                             </tr>
                         </tbody>
                     </table>
