@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class GeneradorCsv {
 
@@ -153,6 +154,56 @@ public class GeneradorCsv {
             }
         } catch (Exception e) {
             throw new RuntimeException("Error al generar el reporte de ganancias por usuario", e);
+        }
+    }
+
+    public void generarReporteComputadorasMasVendidas(PrintWriter writer, List<Map<String, Object>> listaComputadoras) {
+        try {
+            // Encabezado del reporte
+            writer.println(tituloReporte);
+            writer.println("Generado por: " + nombreUsuarioActivo);
+            writer.println("Fecha de generación: " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            writer.println("Rango de fechas: "
+                    + (fechaInicio != null ? fechaInicio : "Sin inicio definido") + " a "
+                    + (fechaFin != null ? fechaFin : "Sin fin definido"));
+            writer.println();
+
+            // Encabezados de las columnas
+            writer.println("Tipo de Computadora,Total Vendidas");
+
+            // Escribir los datos del reporte
+            for (Map<String, Object> computadora : listaComputadoras) {
+                writer.printf("%s,%s%n",
+                        computadora.get("tipo_computadora"),
+                        computadora.get("total_vendidas"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar el reporte de computadoras más vendidas", e);
+        }
+    }
+
+    public void generarReporteComputadorasMenosVendidas(PrintWriter writer, List<Map<String, Object>> listaComputadoras) {
+        try {
+            // Encabezado del reporte
+            writer.println(tituloReporte);
+            writer.println("Generado por: " + nombreUsuarioActivo);
+            writer.println("Fecha de generación: " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            writer.println("Rango de fechas: "
+                    + (fechaInicio != null ? fechaInicio : "Sin inicio definido") + " a "
+                    + (fechaFin != null ? fechaFin : "Sin fin definido"));
+            writer.println();
+
+            // Encabezados de las columnas
+            writer.println("Tipo de Computadora,Total Vendidas");
+
+            // Escribir los datos del reporte
+            for (Map<String, Object> computadora : listaComputadoras) {
+                writer.printf("%s,%s%n",
+                        computadora.get("tipo_computadora"),
+                        computadora.get("total_vendidas"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar el reporte de computadoras menos vendidas", e);
         }
     }
 

@@ -4,6 +4,7 @@
  */
 package Controllers.Administrador;
 
+import Controllers.GeneradorCsv;
 import backendDB.ModelosDB.ReportesAdminDB;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +30,21 @@ public class ReportesAdminComputadoraMasVendidaServlet extends HttpServlet {
         // Obtener parámetros del rango de fechas
         String fechaInicio = request.getParameter("fechaInicio");
         String fechaFin = request.getParameter("fechaFin");
+        String export = request.getParameter("export"); // Parámetro para exportar CSV
 
         try {
+            // Si las fechas son opcionales, asignar valores nulos para la consulta
+            fechaInicio = (fechaInicio == null || fechaInicio.isEmpty()) ? null : fechaInicio;
+            fechaFin = (fechaFin == null || fechaFin.isEmpty()) ? null : fechaFin;
+
             // Llamar al método para obtener la lista de computadoras vendidas
             List<Map<String, Object>> listaComputadoras = ReportesAdminDB.obtenerComputadorasVendidas(fechaInicio, fechaFin);
+
+            // Verificar si se solicita la exportación a CSV
+            if ("csv".equalsIgnoreCase(export)) {
+                exportarCSV(request, response, listaComputadoras, fechaInicio, fechaFin);
+                return; // Finalizar después de la exportación
+            }
 
             // Enviar los resultados al JSP
             request.setAttribute("listaComputadoras", listaComputadoras);
@@ -48,6 +61,24 @@ public class ReportesAdminComputadoraMasVendidaServlet extends HttpServlet {
         }
     }
 
+    private void exportarCSV(HttpServletRequest request, HttpServletResponse response, List<Map<String, Object>> listaComputadoras, String fechaInicio, String fechaFin) throws IOException {
+        // Obtener el usuario activo de la sesión
+        HttpSession session = request.getSession();
+        String nombreUsuarioActivo = (String) session.getAttribute("nombreUsuarioActivo");
+
+        // Configurar las cabeceras HTTP para el archivo CSV
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"reporteComputadorasMasVendidas.csv\"");
+
+        // Crear una instancia
+        GeneradorCsv generadorCsv = new GeneradorCsv("Reporte - Computadoras Más Vendidas", nombreUsuarioActivo, fechaInicio, fechaFin);
+
+        // generar el reporte
+        try (PrintWriter writer = response.getWriter()) {
+            generadorCsv.generarReporteComputadorasMasVendidas(writer, listaComputadoras);
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,6 +86,3 @@ public class ReportesAdminComputadoraMasVendidaServlet extends HttpServlet {
         request.getRequestDispatcher("Administrador/reportesAdminComputadoraMasVendida.jsp").forward(request, response);
     }
 }
-
-
-
