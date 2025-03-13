@@ -54,6 +54,12 @@
                             </div>
                             <button type="submit" class="btn btn-primary mt-4">Generar Reporte</button>
                         </form>
+                        <form action="${pageContext.request.contextPath}/ReportesAdminMasVentasServlet" method="post">
+                            <input type="hidden" name="fechaInicio" value="<%= request.getAttribute("fechaInicio") != null ? request.getAttribute("fechaInicio") : ""%>">
+                            <input type="hidden" name="fechaFin" value="<%= request.getAttribute("fechaFin") != null ? request.getAttribute("fechaFin") : ""%>">
+                            <input type="hidden" name="export" value="csv">
+                            <button type="submit" class="btn btn-success mt-4">Exportar a CSV</button>
+                        </form>
 
                         <!-- Tabla para mostrar los resultados -->
                         <%

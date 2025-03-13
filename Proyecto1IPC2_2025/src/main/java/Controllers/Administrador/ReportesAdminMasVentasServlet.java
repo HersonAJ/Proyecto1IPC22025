@@ -4,6 +4,7 @@
  */
 package Controllers.Administrador;
 
+import Controllers.GeneradorCsv;
 import Modelos.Usuario;
 import backendDB.ModelosDB.ReportesAdminDB;
 import java.io.IOException;
@@ -12,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -27,6 +30,7 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
         // Obtener los parámetros del rango de fechas enviados desde el formulario JSP
         String fechaInicio = request.getParameter("fechaInicio");
         String fechaFin = request.getParameter("fechaFin");
+        String export = request.getParameter("export"); // Parámetro para exportar CSV
 
         // Validar que ambos parámetros estén presentes
         if (fechaInicio == null || fechaInicio.isEmpty() || fechaFin == null || fechaFin.isEmpty()) {
@@ -38,6 +42,12 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
         try {
             // Llamar al método del modelo para obtener los usuarios con más ventas
             List<Usuario> reporteUsuarios = ReportesAdminDB.obtenerUsuariosConVentas(fechaInicio, fechaFin);
+
+            // Verificar si se solicita la exportación a CSV
+            if ("csv".equalsIgnoreCase(export)) {
+                exportarCSV(request, response, reporteUsuarios, fechaInicio, fechaFin);
+                return; // Terminar después de generar el archivo
+            }
 
             // Verificar si el reporte tiene resultados
             if (reporteUsuarios.isEmpty()) {
@@ -60,6 +70,24 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
         }
     }
 
+    private void exportarCSV(HttpServletRequest request, HttpServletResponse response, List<Usuario> reporteUsuarios, String fechaInicio, String fechaFin) throws IOException {
+        // Obtener el usuario activo de la sesión
+        HttpSession session = request.getSession();
+        String nombreUsuarioActivo = (String) session.getAttribute("nombreUsuarioActivo");
+
+        // Configurar las cabeceras HTTP para el archivo CSV
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"reporteVentasPorUsuario.csv\"");
+
+        // Crear una instancia
+        GeneradorCsv generadorCsv = new GeneradorCsv("Reporte de Ventas por Usuario", nombreUsuarioActivo, fechaInicio, fechaFin);
+
+        // generar el reporte
+        try (PrintWriter writer = response.getWriter()) {
+            generadorCsv.generarReporteVentasPorUsuario(writer, reporteUsuarios);
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -67,4 +95,5 @@ public class ReportesAdminMasVentasServlet extends HttpServlet {
         request.getRequestDispatcher("Administrador/reportesAdminMasVentas.jsp").forward(request, response);
     }
 }
+
 
