@@ -132,4 +132,28 @@ public class GeneradorCsv {
         }
     }
 
+    public void generarReporteGananciasPorUsuario(PrintWriter writer, List<Usuario> reporteUsuarios) {
+        try {
+            // Encabezado del reporte
+            writer.println(tituloReporte);
+            writer.println("Generado por: " + nombreUsuarioActivo);
+            writer.println("Fecha de generación: " + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            writer.println("Rango de fechas: " + fechaInicio + " a " + fechaFin);
+            writer.println();
+
+            // Encabezados de las columnas
+            writer.println("Usuario,Rol,Total de Ganancias");
+
+            // Escribir los datos del reporte
+            for (Usuario usuario : reporteUsuarios) {
+                writer.printf("%s,%s,\"%.2f\"%n",
+                        usuario.getNombreUsuario(),
+                        usuario.getRolNombre(),
+                        (double) usuario.getTotalVentas());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar el reporte de ganancias por usuario", e);
+        }
+    }
+
 }

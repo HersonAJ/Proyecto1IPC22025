@@ -4,6 +4,7 @@
  */
 package Controllers.Administrador;
 
+import Controllers.GeneradorCsv;
 import Modelos.Usuario;
 import backendDB.ModelosDB.ReportesAdminDB;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public class ReportesAdminUsuarioConGananciaServlet extends HttpServlet {
         // Obtener los parámetros del rango de fechas enviados desde el formulario JSP
         String fechaInicio = request.getParameter("fechaInicio");
         String fechaFin = request.getParameter("fechaFin");
+        String export = request.getParameter("export"); // Parámetro para exportar CSV
 
         // Validar que ambos parámetros estén presentes
         if (fechaInicio == null || fechaInicio.isEmpty() || fechaFin == null || fechaFin.isEmpty()) {
@@ -40,6 +43,12 @@ public class ReportesAdminUsuarioConGananciaServlet extends HttpServlet {
             // Llamar al método del modelo para obtener los usuarios con más ganancias
             List<Usuario> reporteUsuarios = ReportesAdminDB.obtenerUsuariosConGanancias(fechaInicio, fechaFin);
 
+            // Verificar si se solicita exportación a CSV
+            if ("csv".equalsIgnoreCase(export)) {
+                exportarCSV(request, response, reporteUsuarios, fechaInicio, fechaFin);
+                return; // Finalizar después de generar el archivo
+            }
+
             // Verificar si el reporte tiene resultados
             if (reporteUsuarios.isEmpty()) {
                 request.setAttribute("mensaje", "No se encontraron ganancias en el rango de fechas seleccionado.");
@@ -47,7 +56,7 @@ public class ReportesAdminUsuarioConGananciaServlet extends HttpServlet {
                 request.setAttribute("reporteUsuarios", reporteUsuarios);
             }
 
-            // Enviar el rango de fechas y el reporte a la vista
+            // Enviar las fechas seleccionadas y los datos del reporte a la vista
             request.setAttribute("fechaInicio", fechaInicio);
             request.setAttribute("fechaFin", fechaFin);
 
@@ -58,6 +67,24 @@ public class ReportesAdminUsuarioConGananciaServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("error", "Ocurrió un error al generar el reporte: " + e.getMessage());
             request.getRequestDispatcher("Administrador/reportesAdminVendedorMasGanancia.jsp").forward(request, response);
+        }
+    }
+
+    private void exportarCSV(HttpServletRequest request, HttpServletResponse response, List<Usuario> reporteUsuarios, String fechaInicio, String fechaFin) throws IOException {
+        // Obtener el usuario activo de la sesión
+        HttpSession session = request.getSession();
+        String nombreUsuarioActivo = (String) session.getAttribute("nombreUsuarioActivo");
+
+        // Configurar las cabeceras HTTP para el archivo CSV
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"reporteGananciasPorUsuario.csv\"");
+
+        // Crear una instancia
+        GeneradorCsv generadorCsv = new GeneradorCsv("Reporte de Ganancias por Usuario", nombreUsuarioActivo, fechaInicio, fechaFin);
+
+        // generar el reporte
+        try (PrintWriter writer = response.getWriter()) {
+            generadorCsv.generarReporteGananciasPorUsuario(writer, reporteUsuarios);
         }
     }
 
