@@ -1,9 +1,5 @@
-<%@page import="backendDB.ModelosDB.Vendedor.VendedorConsultaComprasCliente"%>
-<%@page import="Modelos.ComputadoraEnsamblada"%>
 <%@page import="java.util.List"%>
 <%@page import="Modelos.Venta"%>
-<%@page import="Modelos.Cliente"%>
-<%@page import="Modelos.Usuario"%>
 <%@page import="Modelos.DetalleVenta"%>
 <%@ include file="/resources/resources.jsp" %>
 <%@ include file="/resources/header.jsp" %>
@@ -34,6 +30,8 @@
             <main class="col-md-9">
                 <div class="container">
                     <h2 class="mt-4">Reporte de Ventas</h2>
+
+                    <!-- Formulario para generar el reporte -->
                     <form method="post" action="${pageContext.request.contextPath}/reporteVentas">
                         <div class="form-group">
                             <label for="fechaInicio">Fecha de Inicio:</label>
@@ -46,6 +44,15 @@
                         <button type="submit" class="btn btn-primary mt-3">Generar Reporte</button>
                     </form>
 
+                    <!-- Botón para exportar el reporte a CSV -->
+                    <form method="post" action="${pageContext.request.contextPath}/reporteVentas">
+                        <input type="hidden" name="fechaInicio" value="${param.fechaInicio}">
+                        <input type="hidden" name="fechaFin" value="${param.fechaFin}">
+                        <input type="hidden" name="export" value="csv">
+                        <button type="submit" class="btn btn-success mt-3">Exportar a CSV</button>
+                    </form>
+
+                    <!-- Tabla de reporte de ventas -->
                     <%
                         List<Venta> ventas = (List<Venta>) request.getAttribute("ventas");
                         if (ventas != null && !ventas.isEmpty()) {
@@ -65,24 +72,10 @@
                             <% for (Venta venta : ventas) { %>
                             <tr>
                                 <td><%= venta.getIdVenta() %></td>
-                                <td><%= venta.getFechaVenta() %></td>
-                                <td>
-                                    <%
-                                        Cliente cliente = (Cliente) request.getAttribute("cliente_" + venta.getIdVenta());
-                                        if (cliente != null) {
-                                            out.print(cliente.getNombre());
-                                        }
-                                    %>
-                                </td>
-                                <td>
-                                    <%
-                                        Usuario usuarioVenta = (Usuario) request.getAttribute("usuarioVenta_" + venta.getIdVenta());
-                                        if (usuarioVenta != null) {
-                                            out.print(usuarioVenta.getNombreUsuario());
-                                        }
-                                    %>
-                                </td>
-                                <td><%= venta.getTotalVenta() %></td>
+                                <td><%= venta.getFechaVenta() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(venta.getFechaVenta()) : "N/A" %></td>
+                                <td><%= venta.getNombreCliente() %></td>
+                                <td><%= venta.getNombreVendedor() %></td>
+                                <td>Q<%= String.format("%.2f", venta.getTotalVenta()) %></td>
                                 <td>
                                     <button class="btn btn-info btn-sm" type="button" onclick="toggleDetalles(<%= venta.getIdVenta() %>)">Ver Detalles</button>
                                 </td>
@@ -93,30 +86,18 @@
                                         <thead>
                                             <tr>
                                                 <th>ID Computadora</th>
-                                                <th>Nombre</th>
                                                 <th>Cantidad</th>
                                                 <th>Subtotal</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <%
-                                                List<DetalleVenta> detallesVenta = (List<DetalleVenta>) request.getAttribute("detallesVenta_" + venta.getIdVenta());
-                                                if (detallesVenta != null) {
-                                                    for (DetalleVenta detalle : detallesVenta) {
-                                                        ComputadoraEnsamblada computadora = VendedorConsultaComprasCliente.obtenerComputadoraEnsamblada(detalle.getIdComputadora());
-                                                        if (computadora != null) {
-                                            %>
+                                            <% for (DetalleVenta detalle : venta.getDetallesVenta()) { %>
                                             <tr>
                                                 <td><%= detalle.getIdComputadora() %></td>
-                                                <td><%= computadora.getTipoComputadora().getNombre() %></td>
                                                 <td><%= detalle.getCantidad() %></td>
-                                                <td><%= detalle.getSubtotal() %></td>
+                                                <td>Q<%= String.format("%.2f", detalle.getSubtotal()) %></td>
                                             </tr>
-                                            <%
-                                                        }
-                                                    }
-                                                }
-                                            %>
+                                            <% } %>
                                         </tbody>
                                     </table>
                                 </td>

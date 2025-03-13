@@ -5,6 +5,7 @@
 package Modelos;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -19,7 +20,33 @@ public class Venta {
     private double totalVenta;
     private int numeroFactura;
     private int idComputadoraEnsamblada;
+    private List<DetalleVenta> detallesVenta;
+    private String nombreCliente;
+    private String nombreVendedor;
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public String getNombreVendedor() {
+        return nombreVendedor;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public void setNombreVendedor(String nombreVendedor) {
+        this.nombreVendedor = nombreVendedor;
+    }
+    
+    public List<DetalleVenta> getDetallesVenta() {
+        return detallesVenta;
+    }
+
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
+        this.detallesVenta = detallesVenta;
+    }
     
     public int getNumeroFactura() {
         return numeroFactura;
